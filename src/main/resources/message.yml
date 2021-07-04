@@ -1,0 +1,24 @@
+Help:
+  - '/pf nav <id> - 坐标导航'
+  - '/pf npc <id> - NPC导航'
+  - '/pf nav <player> <id> - 玩家导航到坐标'
+  - '/pf npc <player> <id> - 玩家导航的NPC'
+AdminHelp:
+  - '/pf coord - 坐标命令'
+  - '/pf reload - 重载插件'
+Coord:
+  - '============================================'
+  - '/pf coord list - 列出所有坐标'
+  - '/pf coord add <id> - 添加当前位置坐标'
+  - '/pf coord set <id> - 设置已有坐标为当前位置'
+  - '/pf coord del <id> - 删除坐标'
+  - '/pf coord tp <id> - 传送到坐标'
+Message:
+  NoPermission: '&3你没有权限: %s%'
+  NotExistsCoord: '&a导航失败，该坐标不存在'
+  NotExistsNPC: '&a导航失败，该NPC不存在'
+  ArriveCoord: '&a已到达目的地，导航结束'
+  NotSameWorldCoord: '&a该坐标与你不在同一世界，无法进行导航'
+  NotSameWorldNPC: '&a该NPC与你不在同一世界，无法进行导航'
+  NavFailure: '&a导航失败，你当前位置无法达到目标点'
+  PlayerIsOffline: '&c该玩家不在线'

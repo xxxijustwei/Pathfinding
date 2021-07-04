@@ -1,0 +1,14 @@
+name: Pathfinding
+main: com.taylorswiftcn.megumi.pathfinding.Main
+version: '1.0'
+author: 'Megumi'
+api-version: '1.13'
+depend:
+  - ProtocolLib
+  - Citizens
+softdepend:
+  - DragonCore
+
+commands:
+  pf:
+    description: show all command

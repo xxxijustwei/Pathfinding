@@ -1,0 +1,15 @@
+Prefix: '[PathFinding]'
+DragonCore: true
+#是否使用Dragoncore
+#不使用导航则用粒子显示
+Debug: false
+Model: 1
+#0 - 曼哈顿距离
+#1 - 欧氏距离
+#效率: 曼哈顿距离 > 欧式距离
+#精确度: 欧式距离 > 曼哈顿距离
+NavigationBar: '&a距离目标位置还有 %s% M'
+Hint: '&f%s% M'
+Title:
+  Theme: '&a【导航系统】'
+  Sub: '&7正在为你导航'
