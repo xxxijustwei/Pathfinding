@@ -47,14 +47,20 @@ public class DCoreNavigationTask extends BukkitRunnable {
 
     @Override
     public synchronized void cancel() throws IllegalStateException {
-        delView();
         super.cancel();
+        delView();
+        if (npc != null && glow) EntityGlowUtil.unGlow(player, npc);
     }
 
     @Override
     public void run() {
         if (!player.isOnline()) {
             delView();
+            cancel();
+            return;
+        }
+
+        if (player.getLocation().getWorld() != target.getWorld()) {
             cancel();
             return;
         }

@@ -39,8 +39,19 @@ public class NavigationTask extends BukkitRunnable {
     }
 
     @Override
+    public synchronized void cancel() throws IllegalStateException {
+        super.cancel();
+        if (npc != null && glow) EntityGlowUtil.unGlow(player, npc);
+    }
+
+    @Override
     public void run() {
         if (!player.isOnline()) {
+            cancel();
+            return;
+        }
+
+        if (player.getLocation().getWorld() != target.getWorld()) {
             cancel();
             return;
         }
