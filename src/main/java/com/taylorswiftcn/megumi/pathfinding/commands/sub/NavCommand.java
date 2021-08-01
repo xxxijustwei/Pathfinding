@@ -21,6 +21,11 @@ public class NavCommand extends MegumiCommand {
             String id = Strings[1];
             Player player = getPlayer();
 
+            if (player.isFlying()) {
+                player.sendMessage(ConfigFile.Prefix + MessageFile.navFailure);
+                return;
+            }
+
             if (!getPlugin().getCoord().containsKey(id)) {
                 player.sendMessage(ConfigFile.Prefix + MessageFile.notExistsCoord);
                 return;

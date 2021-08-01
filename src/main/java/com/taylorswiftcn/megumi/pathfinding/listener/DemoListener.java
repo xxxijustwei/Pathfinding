@@ -20,7 +20,7 @@ public class DemoListener implements Listener {
         String msg = e.getMessage();
 
         if (!msg.equalsIgnoreCase("#cancel")) return;
-        if (!SearchPathManager.getParticle().containsKey(uuid)) return;
+        if (!SearchPathManager.getDemo().containsKey(uuid)) return;
 
         SearchPathManager.cancelDemo(player);
         e.setCancelled(true);

@@ -4,6 +4,7 @@ import com.taylorswiftcn.megumi.pathfinding.Main;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
+import com.taylorswiftcn.megumi.pathfinding.task.DCoreDemoTask;
 import com.taylorswiftcn.megumi.pathfinding.task.DCoreNavigationTask;
 import com.taylorswiftcn.megumi.pathfinding.task.NavigationTask;
 import com.taylorswiftcn.megumi.pathfinding.task.ParticleDemoTask;
@@ -20,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.Door;
 import org.bukkit.material.Gate;
 import org.bukkit.material.MaterialData;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -83,14 +85,8 @@ public class AStarFinder {
 
     private void visual() {
         if (!SearchPathManager.getVisual().contains(player.getUniqueId())) {
-            if (Main.dragonCore) {
-                DCoreNavigationTask task = new DCoreNavigationTask(player, Arrays.asList(path), target, npc);
-                task.runTaskTimerAsynchronously(Main.getInstance(), 0, 2);
-                SearchPathManager.getFindTask().put(player.getUniqueId(), task);
-                return;
-            }
-            NavigationTask task = new NavigationTask(player, Arrays.asList(path), target, npc);
-            task.runTaskTimerAsynchronously(Main.getInstance(), 0, 10);
+            BukkitRunnable task = Main.dragonCore ?  new DCoreNavigationTask(player, Arrays.asList(path), target, npc) : new NavigationTask(player, Arrays.asList(path), target, npc);
+            task.runTaskTimerAsynchronously(Main.getInstance(), 0, Main.dragonCore ? 2 : 10);
             SearchPathManager.getFindTask().put(player.getUniqueId(), task);
             return;
         }
@@ -107,9 +103,9 @@ public class AStarFinder {
         player.spigot().sendMessage(text);
         player.sendMessage(" ");
 
-        ParticleDemoTask task = new ParticleDemoTask(player, openNodes, closeNodes, Arrays.asList(path));
+        BukkitRunnable task = Main.dragonCore ? new DCoreDemoTask(player, openNodes, closeNodes, Arrays.asList(path)) : new ParticleDemoTask(player, openNodes, closeNodes, Arrays.asList(path));
         task.runTaskTimerAsynchronously(Main.getInstance(), 0, 5);
-        SearchPathManager.addDemoTaskID(player, task.getTaskId());
+        SearchPathManager.addDemoTaskID(player, task);
 
         if (npc != null) SearchPathManager.getGlow().put(player.getUniqueId(), npc);
     }

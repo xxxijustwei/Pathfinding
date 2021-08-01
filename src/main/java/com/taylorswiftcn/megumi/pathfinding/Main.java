@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.taylorswiftcn.megumi.pathfinding.commands.MainCommand;
 import com.taylorswiftcn.megumi.pathfinding.file.FileManager;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
+import com.taylorswiftcn.megumi.pathfinding.listener.DemoListener;
 import com.taylorswiftcn.megumi.pathfinding.util.MegumiUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -48,7 +49,7 @@ public class Main extends JavaPlugin {
         /*WayPointHandler.init();*/
 
         getCommand("pf").setExecutor(new MainCommand());
-        /*Bukkit.getPluginManager().registerEvents(new DemoListener(), this);*/
+        Bukkit.getPluginManager().registerEvents(new DemoListener(), this);
 
         long end = System.currentTimeMillis();
 
@@ -72,6 +73,7 @@ public class Main extends JavaPlugin {
         coord.clear();
 
         fileManager.init();
+        dragonCore = ConfigFile.dragonCore && Bukkit.getPluginManager().getPlugin("DragonCore") != null;
         load();
     }
 

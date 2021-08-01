@@ -1,13 +1,17 @@
 package com.taylorswiftcn.megumi.pathfinding.commands;
 
 import com.taylorswiftcn.megumi.pathfinding.commands.sub.*;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class MainCommand implements CommandExecutor {
+public class MainCommand implements TabExecutor {
     private HelpCommand help;
     private HashMap<String, MegumiCommand> commands;
 
@@ -18,8 +22,8 @@ public class MainCommand implements CommandExecutor {
         /*this.commands.put("wp", new WayPointCommand());*/
         this.commands.put("nav", new NavCommand());
         this.commands.put("npc", new NPCCommand());
-        /*this.commands.put("visual", new VisualCommand());
-        this.commands.put("cancel", new CancelCommand());*/
+        this.commands.put("visual", new VisualCommand());
+        this.commands.put("cancel", new CancelCommand());
         this.commands.put("reload", new ReloadCommand());
     }
 
@@ -31,5 +35,15 @@ public class MainCommand implements CommandExecutor {
         }
         cmd.execute(commandSender, strings);
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length > 1) return null;
+
+        List<String> keys = new ArrayList<>(commands.keySet());
+        if (args.length == 0) return keys;
+
+        return keys.stream().filter(s -> StringUtils.startsWithIgnoreCase(s, args[0])).collect(Collectors.toList());
     }
 }

@@ -19,7 +19,7 @@ public class SearchPathManager {
     private static Main plugin = Main.getInstance();
     @Getter private static HashMap<UUID, BukkitRunnable> findTask = new HashMap<>();
     @Getter private static List<UUID> visual = new ArrayList<>();
-    @Getter private static HashMap<UUID, Integer> particle = new HashMap<>();
+    @Getter private static HashMap<UUID, BukkitRunnable> demo = new HashMap<>();
     @Getter private static HashMap<UUID, Entity> glow = new HashMap<>();
 
     public static void switchVisual(Player player) {
@@ -34,21 +34,22 @@ public class SearchPathManager {
         }
     }
 
-    public static void addDemoTaskID(Player player, int tid) {
+    public static void addDemoTaskID(Player player, BukkitRunnable task) {
         UUID uuid = player.getUniqueId();
-        if (particle.containsKey(uuid)) {
-            int id = particle.get(uuid);
-            Bukkit.getScheduler().cancelTask(id);
+        if (demo.containsKey(uuid)) {
+            BukkitRunnable current = demo.get(uuid);
+            current.cancel();
         }
 
-        particle.put(uuid, tid);
+        demo.put(uuid, task);
     }
 
     public static void cancelDemo(Player player) {
         UUID uuid = player.getUniqueId();
-        if (!particle.containsKey(uuid)) return;
-        int id = particle.get(uuid);
-        Bukkit.getScheduler().cancelTask(id);
+        if (!demo.containsKey(uuid)) return;
+        BukkitRunnable task = demo.get(uuid);
+        task.cancel();
+        demo.remove(uuid);
         if (glow.containsKey(uuid)) {
             EntityGlowUtil.unGlow(player, glow.get(uuid));
         }

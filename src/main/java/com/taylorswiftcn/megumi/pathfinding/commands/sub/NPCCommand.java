@@ -23,6 +23,11 @@ public class NPCCommand extends MegumiCommand {
             String s = Strings[1];
             Player player = getPlayer();
 
+            if (player.isFlying()) {
+                player.sendMessage(ConfigFile.Prefix + MessageFile.navFailure);
+                return;
+            }
+
             if (!MegumiUtil.isInteger(s)) return;
 
             int id = Integer.parseInt(s);
