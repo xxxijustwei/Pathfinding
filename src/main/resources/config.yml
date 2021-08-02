@@ -18,6 +18,10 @@ Base:
   #1 - 欧氏距离
   #效率: 曼哈顿距离 > 欧式距离
   #精确度: 欧式距离 > 曼哈顿距离
+  OpenNodeLimit: 600
+  #最大队列中可探索路径点数量限制
+  #如果路径计算中OpenNode节点数量超过该值就结束计算
+  #debug模式下导航可以提示本次导航路径计算中OpenNode节点数量
 Tips:
   ActionBar: '&a距离目标位置还有 %s% M'
   Hologram:

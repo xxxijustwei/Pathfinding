@@ -21,6 +21,7 @@ public class ConfigFile {
 
     public static class Base {
         public static Integer mode;
+        public static Integer openNodeCount;
     }
 
     public static class Tips {
@@ -40,6 +41,7 @@ public class ConfigFile {
         Enable.hologram = config.getBoolean("Enable.Hologram");
         Enable.title = config.getBoolean("Enable.Title");
         Base.mode = config.getInt("Base.Mode");
+        Base.openNodeCount = config.getInt("Base.OpenNodeLimit");
         Tips.actionBar = getString("Tips.ActionBar");
         Tips.hologram = getStringList("Tips.Hologram");
         Tips.title_theme = getString("Tips.Title.Theme");

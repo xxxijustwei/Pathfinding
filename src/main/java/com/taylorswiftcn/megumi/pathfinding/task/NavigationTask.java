@@ -32,7 +32,6 @@ public class NavigationTask extends BukkitRunnable {
         this.target = target;
         this.npc = npc;
         this.glow = false;
-        this.initHologram();
     }
 
     private void initHologram() {
@@ -58,18 +57,22 @@ public class NavigationTask extends BukkitRunnable {
             return;
         }
 
-        if (!glow && npc != null) {
-            if (player.getLocation().distance(npc.getLocation()) < 32) {
-                EntityGlowUtil.glow(player, npc);
-                glow = true;
-            }
-        }
+        int distance = BigDecimal.valueOf(player.getLocation().distance(npc.getLocation())).setScale(0, BigDecimal.ROUND_DOWN).intValue();
 
-        if (player.getLocation().distance(target) < 3) {
+        if (distance < 2) {
             if (npc != null) EntityGlowUtil.unGlow(player, npc);
             player.sendMessage(ConfigFile.Prefix + MessageFile.arriveCoord);
             cancel();
             return;
+        }
+
+        if (distance <= 24 && !SearchPathManager.getHolograms().containsKey(player.getUniqueId())) {
+            initHologram();
+        }
+
+        if (!glow && npc != null && distance < 32) {
+            EntityGlowUtil.glow(player, npc);
+            glow = true;
         }
 
         BigDecimal dis = BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN);

@@ -47,6 +47,11 @@ public class AStarFinder {
     private Entity npc;
 
     /**
+     * 开放节点数量限制
+     */
+    private Integer openNodeLimit;
+
+    /**
      * 起始路径点
      */
     private PathNode start;
@@ -96,6 +101,19 @@ public class AStarFinder {
      * @param npc    NPC
      */
     public AStarFinder(Player player, Location origin, Location target, Entity npc) {
+        this(player, origin, target, npc, -1);
+    }
+
+    /**
+     * 斯达仪
+     *
+     * @param player 玩家
+     * @param origin 起点
+     * @param target 终点
+     * @param npc    NPC
+     * @param openNodeLimit 开放节点数量限制
+     */
+    public AStarFinder(Player player, Location origin, Location target, Entity npc, int openNodeLimit) {
         this.player = player;
         this.origin = origin;
         this.target = target;
@@ -104,6 +122,7 @@ public class AStarFinder {
         this.openNodes = new PriorityQueue<>();
         this.closeNodes = new ArrayList<>();
         this.npc = npc;
+        this.openNodeLimit = openNodeLimit;
         this.time = -1;
     }
 
@@ -182,7 +201,7 @@ public class AStarFinder {
         long a = System.currentTimeMillis();
         while (!openNodes.isEmpty()) {
 
-            if (openNodes.size() > 600) return false;
+            if (openNodes.size() > getNodeLimit()) return false;
 
             PathNode current = openNodes.poll();
 
@@ -225,6 +244,17 @@ public class AStarFinder {
         MegumiUtil.debug(player, "§c未找到路径");
 
         return false;
+    }
+
+    /**
+     * 获取开放节点数量限制
+     *
+     * @return {@link Integer}
+     */
+    private Integer getNodeLimit() {
+        if (openNodeLimit == -1) return ConfigFile.Base.openNodeCount;
+
+        return openNodeLimit;
     }
 
     /**

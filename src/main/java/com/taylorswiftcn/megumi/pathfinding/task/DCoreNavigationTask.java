@@ -37,7 +37,6 @@ public class DCoreNavigationTask extends BukkitRunnable {
         this.npc = npc;
         this.glow = false;
         this.index = 0;
-        this.initHologram();
     }
 
     private void initHologram() {
@@ -70,14 +69,9 @@ public class DCoreNavigationTask extends BukkitRunnable {
             return;
         }
 
-        if (!glow && npc != null) {
-            if (player.getLocation().distance(npc.getLocation()) < 32) {
-                EntityGlowUtil.glow(player, npc);
-                glow = true;
-            }
-        }
+        int distance = BigDecimal.valueOf(player.getLocation().distance(npc.getLocation())).setScale(0, BigDecimal.ROUND_DOWN).intValue();
 
-        if (player.getLocation().distance(target) < 3) {
+        if (distance < 2) {
             delView();
             if (npc != null) EntityGlowUtil.unGlow(player, npc);
             player.sendMessage(ConfigFile.Prefix + MessageFile.arriveCoord);
@@ -85,13 +79,20 @@ public class DCoreNavigationTask extends BukkitRunnable {
             return;
         }
 
+        if (distance <= 24 && !SearchPathManager.getHolograms().containsKey(player.getUniqueId())) {
+            initHologram();
+        }
+
+        if (!glow && npc != null && distance < 32) {
+            EntityGlowUtil.glow(player, npc);
+            glow = true;
+        }
+
         CoreAPI.setPlayerWorldTexture(player, key + getLast(index), getLoc(getLast(index)), 0, 0, 0, "pathfinding/nav_a.png", 0.6f, 0.6f, 1, true, false);
         CoreAPI.setPlayerWorldTexture(player, key + index, getLoc(index), 0, 0, 0, "pathfinding/nav_b.png", 0.8f, 0.8f, 1, true, false);
 
-        BigDecimal dis = BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN);
-
-        SearchPathManager.updateLine(player, dis.intValue());
-        SearchPathManager.sendNavActionBar(player, dis.intValue());
+        SearchPathManager.updateLine(player, distance);
+        SearchPathManager.sendNavActionBar(player, distance);
 
         index++;
         if (index >= path.size()) index = 0;

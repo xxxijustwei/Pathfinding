@@ -120,6 +120,7 @@ public class SearchPathManager {
     public static void updateLine(Player player, int dis) {
         if (!(ConfigFile.Enable.hologram && Main.hologram)) return;
         UUID uuid = player.getUniqueId();
+        if (!holograms.containsKey(uuid)) return;
 
         new BukkitRunnable() {
             @Override

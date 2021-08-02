@@ -53,7 +53,7 @@ public class Main extends JavaPlugin {
         long end = System.currentTimeMillis();
 
         MegumiUtil.log("§3加载成功! 用时 %time% ms".replace("%time%", String.valueOf(end - start)));
-        MegumiUtil.log("§e作者: Megumi");
+        MegumiUtil.log("§e作者: justwei");
         MegumiUtil.log("###########################");
     }
 
