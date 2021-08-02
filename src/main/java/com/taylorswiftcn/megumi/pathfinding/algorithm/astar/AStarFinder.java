@@ -27,27 +27,74 @@ import java.util.*;
 
 public class AStarFinder {
 
+    /**
+     * 玩家
+     */
     private Player player;
 
+    /**
+     * 起点
+     */
     private Location origin;
+    /**
+     * 终点
+     */
     private Location target;
 
+    /**
+     * NPC
+     */
     private Entity npc;
 
+    /**
+     * 起始路径点
+     */
     private PathNode start;
+    /**
+     * 终止路径点
+     */
     private PathNode end;
 
+    /**
+     * 开放节点
+     * 队列中需要探索的路径点
+     */
     private Queue<PathNode> openNodes;
+    /**
+     * 关闭节点
+     * 已经探索过的路径点
+     */
     private List<PathNode> closeNodes;
 
+    /**
+     * 路径
+     */
     private Location[] path;
 
+    /**
+     * 用时
+     */
     private long time;
 
+    /**
+     * AstarFinder
+     *
+     * @param player 玩家
+     * @param origin 起点
+     * @param target 终点
+     */
     public AStarFinder(Player player, Location origin, Location target) {
         this(player, origin, target, null);
     }
 
+    /**
+     * AstarFinder
+     *
+     * @param player 玩家
+     * @param origin 起点
+     * @param target 终点
+     * @param npc    NPC
+     */
     public AStarFinder(Player player, Location origin, Location target, Entity npc) {
         this.player = player;
         this.origin = origin;
@@ -60,8 +107,11 @@ public class AStarFinder {
         this.time = -1;
     }
 
+    /**
+     * 开始导航
+     */
     public void navigation() {
-        player.sendTitle(ConfigFile.title_theme, ConfigFile.title_sub, 10, 20, 10);
+        SearchPathManager.sendNavTitle(player);
 
         openNodes.add(start);
         if (!getWay()) {
@@ -71,18 +121,31 @@ public class AStarFinder {
         visual();
     }
 
-    public long test() {
+    /**
+     * 测试导航路径计算时间
+     *
+     * @return long
+     */
+    public long testCalculationTime() {
         openNodes.add(start);
         getWay();
         return time;
     }
 
+    /**
+     * 获取导航路径
+     *
+     * @return {@link List<Location>}
+     */
     public List<Location> getPath() {
         openNodes.add(start);
         if (!getWay()) return new ArrayList<>();
         return Arrays.asList(path);
     }
 
+    /**
+     * 导航视觉指引提示
+     */
     private void visual() {
         if (!SearchPathManager.getVisual().contains(player.getUniqueId())) {
             BukkitRunnable task = Main.dragonCore ?  new DCoreNavigationTask(player, Arrays.asList(path), target, npc) : new NavigationTask(player, Arrays.asList(path), target, npc);
@@ -110,6 +173,11 @@ public class AStarFinder {
         if (npc != null) SearchPathManager.getGlow().put(player.getUniqueId(), npc);
     }
 
+    /**
+     * 导航路径探索
+     *
+     * @return boolean
+     */
     private boolean getWay() {
         long a = System.currentTimeMillis();
         while (!openNodes.isEmpty()) {
@@ -128,7 +196,6 @@ public class AStarFinder {
                 }
 
                 last = end;
-                /*Location[] locations = new Location[length];*/
                 path = new Location[length];
                 for (int i = length - 1; i > 0; i--) {
                     Location loc = last.getLocation();
@@ -136,7 +203,6 @@ public class AStarFinder {
                         loc.add(0, -0.5, 0);
                     }
                     path[i] = loc;
-                    /*path[i] = last.getLocation();*/
                     last = last.getParent();
                 }
                 path[0] = origin;
@@ -149,7 +215,6 @@ public class AStarFinder {
                 MegumiUtil.debug(player, "§6已探索路径节点：" + closeNodes.size());
                 MegumiUtil.debug(player, "§6列队中路径节点: " + openNodes.size());
 
-                /*path = locations;*/
                 return true;
             }
 
@@ -162,6 +227,11 @@ public class AStarFinder {
         return false;
     }
 
+    /**
+     * 路径点周围探索
+     *
+     * @param node 路径点
+     */
     private void explore(PathNode node) {
         /*boolean w = false;
         boolean s = false;
@@ -244,6 +314,13 @@ public class AStarFinder {
         }
     }
 
+    /**
+     * 添加邻居路径点
+     *
+     * @param loc     位置
+     * @param parent  父路径点
+     * @param expense 代价
+     */
     private void addNeighborNode(Location loc, PathNode parent, double expense) {
         if (!canAddNodeToOpen(loc)) return;
         PathNode child = getNodeInOpen(loc);
@@ -263,6 +340,12 @@ public class AStarFinder {
     }
 
 
+    /**
+     * 通过位置在开放节点内获取路径点
+     *
+     * @param loc 位置
+     * @return {@link PathNode}
+     */
     private PathNode getNodeInOpen(Location loc) {
         if (openNodes.isEmpty()) return null;
         for (PathNode node : openNodes) {
@@ -272,6 +355,12 @@ public class AStarFinder {
         return null;
     }
 
+    /**
+     * 判断开放节点内是否有该位置的路径点
+     *
+     * @param loc 位置
+     * @return boolean
+     */
     public boolean canAddNodeToOpen(Location loc) {
         if (closeNodes.isEmpty()) return true;
         for (PathNode node : closeNodes) {
@@ -281,6 +370,12 @@ public class AStarFinder {
         return true;
     }
 
+    /**
+     * 判断该位置是否可以让玩家站立
+     *
+     * @param loc 位置
+     * @return boolean
+     */
     private boolean canStandAt(Location loc) {
         if (isDoorOrGate(loc)) {
             MaterialData data = loc.getBlock().getState().getData();
@@ -305,31 +400,62 @@ public class AStarFinder {
         }
 
         return !(isObstructed(loc.clone().add(0, 1, 0)) || !isObstructed(loc.clone().add(0, -1, 0)));
-
-        /*return !(isObstructed(loc) || isObstructed(loc.clone().add(0, 1, 0)) || !isObstructed(loc.clone().add(0, -1, 0)));*/
     }
 
+    /**
+     * 判断该位置方块是否是门或者围栏
+     *
+     * @param loc 位置
+     * @return boolean
+     */
     private boolean isDoorOrGate(Location loc) {
         Material material = loc.getBlock().getType();
 
         return MaterialUtil.isDoorOrGate(material);
     }
 
+    /**
+     * 判断该位置方块是否是实心的
+     *
+     * @param loc 疯狂的
+     * @return boolean
+     */
     private boolean isObstructed(Location loc) {
         Material material = loc.getBlock().getType();
 
         return material.isSolid();
     }
 
+    /**
+     * 获取两个位置之间的距离
+     *
+     * @param locA 位置A
+     * @param locB 位置B
+     * @return double
+     */
     private double getDistance(Location locA, Location locB) {
-        if (ConfigFile.model == 1) return locA.distance(locB);
+        if (ConfigFile.Base.mode == 1) return getEuclideanDistance(locA, locB);
         return getManhattanDistance(locA, locB);
     }
 
+    /**
+     * 获取两个位置间的曼哈顿距离
+     *
+     * @param locA 位置A
+     * @param locB 位置B
+     * @return double
+     */
     private double getManhattanDistance(Location locA, Location locB) {
         return Math.abs(locA.getX() - locB.getX()) + Math.abs(locA.getY() - locB.getY()) + Math.abs(locA.getZ() - locB.getZ());
     }
 
+    /**
+     * 获取两个位置间的欧几里得距离
+     *
+     * @param locA 位置A
+     * @param locB 位置B
+     * @return double
+     */
     private double getEuclideanDistance(Location locA, Location locB) {
         double dx = Math.pow(locA.getBlockX() - locB.getBlockX(), 2);
         double dy = Math.pow(locA.getBlockY() - locB.getBlockY(), 2);

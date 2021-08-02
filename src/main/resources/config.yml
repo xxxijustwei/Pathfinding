@@ -1,15 +1,28 @@
 Prefix: '[PathFinding]'
-DragonCore: true
-#是否使用Dragoncore
-#不使用导航则用粒子显示
-Debug: false
-Model: 1
-#0 - 曼哈顿距离
-#1 - 欧氏距离
-#效率: 曼哈顿距离 > 欧式距离
-#精确度: 欧式距离 > 曼哈顿距离
-NavigationBar: '&a距离目标位置还有 %s% M'
-Hint: '&f%s% M'
-Title:
-  Theme: '&a【导航系统】'
-  Sub: '&7正在为你导航'
+Enable:
+  DragonCore: false
+  #是否使用Dragoncore显示导航路径提示
+  #否则用导航使用粒子来显示路径提示
+  Debug: false
+  #是否启用Debug提示
+  #开启后每次路径导航都会提示一些关键信息
+  ActionBar: true
+  #是否启用actionbar导航提示
+  Hologram: true
+  #是否启用全息导航提示
+  Title: true
+  #是否启用title导航提示
+Base:
+  Mode: 1
+  #0 - 曼哈顿距离
+  #1 - 欧氏距离
+  #效率: 曼哈顿距离 > 欧式距离
+  #精确度: 欧式距离 > 曼哈顿距离
+Tips:
+  ActionBar: '&a距离目标位置还有 %s% M'
+  Hologram:
+    - '[item]STONE'
+    - '[text]&f距离 %s% M'
+  Title:
+    Theme: '&a【导航系统】'
+    Sub: '&7正在为你导航'

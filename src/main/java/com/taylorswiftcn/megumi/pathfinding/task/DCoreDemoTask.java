@@ -55,8 +55,8 @@ public class DCoreDemoTask extends BukkitRunnable {
 
     @Override
     public synchronized void cancel() throws IllegalStateException {
-        super.cancel();
         delView();
+        super.cancel();
     }
 
     @Override

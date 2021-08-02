@@ -96,7 +96,7 @@ public class MegumiUtil {
 
     public static void debug(Player player, String msg) {
         if (player == null || (!player.isOp())) return;
-        if (!ConfigFile.debug) return;
+        if (!ConfigFile.Enable.debug) return;
         player.sendMessage(ConfigFile.Prefix + msg);
     }
 }

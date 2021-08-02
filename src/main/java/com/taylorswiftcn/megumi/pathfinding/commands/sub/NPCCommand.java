@@ -1,5 +1,6 @@
 package com.taylorswiftcn.megumi.pathfinding.commands.sub;
 
+import com.taylorswiftcn.megumi.pathfinding.Main;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.astar.AStarFinder;
 import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
@@ -17,6 +18,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class NPCCommand extends MegumiCommand {
     @Override
     public void perform(CommandSender CommandSender, String[] Strings) {
+        if (!Main.citizens) {
+            CommandSender.sendMessage(ConfigFile.Prefix + "§a未关联Citizens插件，无法使用该命令");
+            return;
+        }
+
         if (Strings.length == 2) {
             if (!(CommandSender instanceof Player)) return;
 

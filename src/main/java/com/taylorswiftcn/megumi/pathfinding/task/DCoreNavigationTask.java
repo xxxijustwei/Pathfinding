@@ -1,13 +1,19 @@
 package com.taylorswiftcn.megumi.pathfinding.task;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import com.taylorswiftcn.megumi.pathfinding.Main;
+import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
-import com.taylorswiftcn.megumi.pathfinding.util.message.ActionBarUtil;
 import com.taylorswiftcn.megumi.pathfinding.util.special.EntityGlowUtil;
 import eos.moe.dragoncore.api.CoreAPI;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.math.BigDecimal;
@@ -31,25 +37,24 @@ public class DCoreNavigationTask extends BukkitRunnable {
         this.npc = npc;
         this.glow = false;
         this.index = 0;
-        this.initView();
+        this.initHologram();
     }
 
-    private void initView() {
-        CoreAPI.setPlayerWorldTexture(player, "ICON", target.clone().add(0, 3.3, 0), 0, 0, 0, "pathfinding/target.png", 1, 1, 1, true, false);
-        CoreAPI.setPlayerWorldTexture(player, "TEXT", target.clone().add(0, 2.5, 0), 0, 0, 0, "[text]" + ConfigFile.hint.replace("%s%", BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN).toString()), 0, 0.3f, 1, true, false);
+    private void initHologram() {
+        SearchPathManager.createHologram(player, target.clone().add(0, 2.5, 0));
     }
 
     private void delView() {
         for (int i = 0; i < path.size(); i++) CoreAPI.removePlayerWorldTexture(player, key + i);
-        CoreAPI.removePlayerWorldTexture(player, "ICON");
-        CoreAPI.removePlayerWorldTexture(player, "TEXT");
+
+        SearchPathManager.removeHologram(player);
     }
 
     @Override
     public synchronized void cancel() throws IllegalStateException {
-        super.cancel();
         delView();
         if (npc != null && glow) EntityGlowUtil.unGlow(player, npc);
+        super.cancel();
     }
 
     @Override
@@ -82,8 +87,11 @@ public class DCoreNavigationTask extends BukkitRunnable {
 
         CoreAPI.setPlayerWorldTexture(player, key + getLast(index), getLoc(getLast(index)), 0, 0, 0, "pathfinding/nav_a.png", 0.6f, 0.6f, 1, true, false);
         CoreAPI.setPlayerWorldTexture(player, key + index, getLoc(index), 0, 0, 0, "pathfinding/nav_b.png", 0.8f, 0.8f, 1, true, false);
-        CoreAPI.setPlayerWorldTexture(player, "TEXT", target.clone().add(0, 2.5, 0), 0, 0, 0, "[text]" + ConfigFile.hint.replace("%s%", BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN).toString()), 0, 0.3f, 1, true, false);
-        ActionBarUtil.sendActionBar(player, ConfigFile.navigationBar.replace("%s%", BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN).toString()));
+
+        BigDecimal dis = BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN);
+
+        SearchPathManager.updateLine(player, dis.intValue());
+        SearchPathManager.sendNavActionBar(player, dis.intValue());
 
         index++;
         if (index >= path.size()) index = 0;

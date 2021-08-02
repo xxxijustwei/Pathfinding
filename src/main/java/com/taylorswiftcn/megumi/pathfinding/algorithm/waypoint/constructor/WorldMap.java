@@ -67,7 +67,7 @@ public class WorldMap {
             if (distance > 75) continue;
 
             AStarFinder astar = new AStarFinder(null, location, site);
-            long time = astar.test();
+            long time = astar.testCalculationTime();
 
             if (time > 20L) continue;
 

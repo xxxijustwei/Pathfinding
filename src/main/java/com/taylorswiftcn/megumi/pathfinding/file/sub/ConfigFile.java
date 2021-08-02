@@ -11,27 +11,39 @@ public class ConfigFile {
 
     public static String Prefix;
 
-    public static Boolean dragonCore;
-    public static Boolean debug;
+    public static class Enable {
+        public static Boolean dragonCore;
+        public static Boolean debug;
+        public static Boolean actionBar;
+        public static Boolean hologram;
+        public static Boolean title;
+    }
 
-    public static Integer model;
+    public static class Base {
+        public static Integer mode;
+    }
 
-    public static String navigationBar;
-    public static String hint;
-    public static String title_theme;
-    public static String title_sub;
+    public static class Tips {
+        public static String actionBar;
+        public static List<String> hologram;
+        public static String title_theme;
+        public static String title_sub;
+    }
 
     public static void init() {
         config = Main.getInstance().getFileManager().getConfig();
 
         Prefix = getString("Prefix");
-        dragonCore = config.getBoolean("DragonCore");
-        debug = config.getBoolean("Debug");
-        model = config.getInt("Model");
-        navigationBar = getString("NavigationBar");
-        hint = getString("Hint");
-        title_theme = getString("Title.Theme");
-        title_sub = getString("Title.Sub");
+        Enable.dragonCore = config.getBoolean("Enable.DragonCore");
+        Enable.debug = config.getBoolean("Enable.Debug");
+        Enable.actionBar = config.getBoolean("Enable.ActionBar");
+        Enable.hologram = config.getBoolean("Enable.Hologram");
+        Enable.title = config.getBoolean("Enable.Title");
+        Base.mode = config.getInt("Base.Mode");
+        Tips.actionBar = getString("Tips.ActionBar");
+        Tips.hologram = getStringList("Tips.Hologram");
+        Tips.title_theme = getString("Tips.Title.Theme");
+        Tips.title_sub = getString("Tips.Title.Sub");
     }
 
     private static String getString(String path) {

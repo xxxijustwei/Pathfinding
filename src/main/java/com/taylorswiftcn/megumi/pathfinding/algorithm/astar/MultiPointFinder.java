@@ -1,6 +1,7 @@
 package com.taylorswiftcn.megumi.pathfinding.algorithm.astar;
 
 import com.taylorswiftcn.megumi.pathfinding.Main;
+import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.waypoint.DjikstraFinder;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.task.NavigationTask;
@@ -36,7 +37,7 @@ public class MultiPointFinder {
     }
 
     public void navigation() {
-        player.sendTitle(ConfigFile.title_theme, ConfigFile.title_sub, 10, 20, 10);
+        SearchPathManager.sendNavTitle(player);
 
         long a = System.currentTimeMillis();
 

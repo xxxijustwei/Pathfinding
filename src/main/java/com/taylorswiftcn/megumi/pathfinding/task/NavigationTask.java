@@ -1,8 +1,8 @@
 package com.taylorswiftcn.megumi.pathfinding.task;
 
+import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
-import com.taylorswiftcn.megumi.pathfinding.util.message.ActionBarUtil;
 import com.taylorswiftcn.megumi.pathfinding.util.special.EntityGlowUtil;
 import com.taylorswiftcn.megumi.pathfinding.util.special.RGBParticleUtil;
 import org.bukkit.Location;
@@ -23,11 +23,7 @@ public class NavigationTask extends BukkitRunnable {
     private Boolean glow;
 
     public NavigationTask(Player player, List<Location> path, Location target) {
-        this.player = player;
-        this.path = path;
-        this.target = target;
-        this.npc = null;
-        this.glow = false;
+        this(player, path, target, null);
     }
 
     public NavigationTask(Player player, List<Location> path, Location target, Entity npc) {
@@ -36,12 +32,18 @@ public class NavigationTask extends BukkitRunnable {
         this.target = target;
         this.npc = npc;
         this.glow = false;
+        this.initHologram();
+    }
+
+    private void initHologram() {
+        SearchPathManager.createHologram(player, target.clone().add(0, 2.5, 0));
     }
 
     @Override
     public synchronized void cancel() throws IllegalStateException {
-        super.cancel();
+        SearchPathManager.removeHologram(player);
         if (npc != null && glow) EntityGlowUtil.unGlow(player, npc);
+        super.cancel();
     }
 
     @Override
@@ -70,7 +72,10 @@ public class NavigationTask extends BukkitRunnable {
             return;
         }
 
-        ActionBarUtil.sendActionBar(player, ConfigFile.navigationBar.replace("%s%", BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN).toString()));
+        BigDecimal dis = BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN);
+
+        SearchPathManager.updateLine(player, dis.intValue());
+        SearchPathManager.sendNavActionBar(player, dis.intValue());
 
         Location front = null;
 

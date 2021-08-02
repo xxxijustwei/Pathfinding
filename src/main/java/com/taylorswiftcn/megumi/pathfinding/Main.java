@@ -25,6 +25,8 @@ public class Main extends JavaPlugin {
     @Getter private HashMap<String, Location> coord;
 
     public static boolean dragonCore;
+    public static boolean citizens;
+    public static boolean hologram;
 
     @Override
     public void onEnable() {
@@ -40,11 +42,8 @@ public class Main extends JavaPlugin {
         fileManager = new FileManager(this);
         fileManager.init();
 
+        initHook();
         load();
-
-        dragonCore = ConfigFile.dragonCore && Bukkit.getPluginManager().getPlugin("DragonCore") != null;
-
-        MegumiUtil.log(String.format("§3插件 DragonCore Hook: %s", dragonCore));
 
         /*WayPointHandler.init();*/
 
@@ -55,7 +54,6 @@ public class Main extends JavaPlugin {
 
         MegumiUtil.log("§3加载成功! 用时 %time% ms".replace("%time%", String.valueOf(end - start)));
         MegumiUtil.log("§e作者: Megumi");
-        MegumiUtil.log("§eQQ: 17328768735");
         MegumiUtil.log("###########################");
     }
 
@@ -69,11 +67,21 @@ public class Main extends JavaPlugin {
         return packet.substring(packet.lastIndexOf('.') + 1);
     }
 
+    private void initHook() {
+        dragonCore = ConfigFile.Enable.dragonCore && Bukkit.getPluginManager().getPlugin("DragonCore") != null;
+        citizens = Bukkit.getPluginManager().getPlugin("Citizens") != null;
+        hologram = Bukkit.getPluginManager().getPlugin("HolographicDisplays") != null;
+
+        MegumiUtil.log(String.format("§3插件 DragonCore Hook: %s", dragonCore));
+        MegumiUtil.log(String.format("§3插件 Citizens Hook: %s", citizens));
+        MegumiUtil.log(String.format("§3插件 HolographicDisplays Hook: %s", hologram));
+    }
+
     public void reload() {
         coord.clear();
 
         fileManager.init();
-        dragonCore = ConfigFile.dragonCore && Bukkit.getPluginManager().getPlugin("DragonCore") != null;
+        dragonCore = ConfigFile.Enable.dragonCore && Bukkit.getPluginManager().getPlugin("DragonCore") != null;
         load();
     }
 
