@@ -1,36 +1,19 @@
 package com.taylorswiftcn.megumi.pathfinding.algorithm.astar;
 
-import com.taylorswiftcn.megumi.pathfinding.Main;
-import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
-import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
-import com.taylorswiftcn.megumi.pathfinding.task.DCoreDemoTask;
-import com.taylorswiftcn.megumi.pathfinding.task.DCoreNavigationTask;
-import com.taylorswiftcn.megumi.pathfinding.task.NavigationTask;
-import com.taylorswiftcn.megumi.pathfinding.task.ParticleDemoTask;
-import com.taylorswiftcn.megumi.pathfinding.util.MegumiUtil;
 import com.taylorswiftcn.megumi.pathfinding.util.special.MaterialUtil;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import lombok.Data;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.material.Door;
 import org.bukkit.material.Gate;
 import org.bukkit.material.MaterialData;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-public class AStarFinder {
-
-    /**
-     * 玩家
-     */
-    private Player player;
+@Data
+public abstract class AStarNavFinder {
 
     /**
      * 起点
@@ -39,7 +22,7 @@ public class AStarFinder {
     /**
      * 终点
      */
-    private Location target;
+    private Location destination;
 
     /**
      * NPC
@@ -84,61 +67,46 @@ public class AStarFinder {
     /**
      * AstarFinder
      *
-     * @param player 玩家
      * @param origin 起点
-     * @param target 终点
+     * @param destination 终点
      */
-    public AStarFinder(Player player, Location origin, Location target) {
-        this(player, origin, target, null);
+    public AStarNavFinder(Location origin, Location destination) {
+        this(origin, destination, null);
     }
 
     /**
      * AstarFinder
      *
-     * @param player 玩家
      * @param origin 起点
-     * @param target 终点
+     * @param destination 终点
      * @param npc    NPC
      */
-    public AStarFinder(Player player, Location origin, Location target, Entity npc) {
-        this(player, origin, target, npc, -1);
+    public AStarNavFinder(Location origin, Location destination, Entity npc) {
+        this(origin, destination, npc, -1);
     }
 
     /**
      * 斯达仪
      *
-     * @param player 玩家
      * @param origin 起点
-     * @param target 终点
+     * @param destination 终点
      * @param npc    NPC
      * @param openNodeLimit 开放节点数量限制
      */
-    public AStarFinder(Player player, Location origin, Location target, Entity npc, int openNodeLimit) {
-        this.player = player;
+    public AStarNavFinder(Location origin, Location destination, Entity npc, int openNodeLimit) {
         this.origin = origin;
-        this.target = target;
-        this.start = new PathNode(origin, null, 0, origin.distance(target));
+        this.destination = destination;
+        this.start = new PathNode(origin, null, 0, origin.distance(destination));
         this.end = new PathNode(origin, null, 0, 0);
         this.openNodes = new PriorityQueue<>();
         this.closeNodes = new ArrayList<>();
         this.npc = npc;
         this.openNodeLimit = openNodeLimit;
         this.time = -1;
+        this.openNodes.add(start);
     }
 
-    /**
-     * 开始导航
-     */
-    public void navigation() {
-        SearchPathManager.sendNavTitle(player);
-
-        openNodes.add(start);
-        if (!getWay()) {
-            player.sendMessage(ConfigFile.Prefix + MessageFile.navFailure);
-            return;
-        }
-        visual();
-    }
+    public abstract List<Location> start();
 
     /**
      * 测试导航路径计算时间
@@ -147,7 +115,7 @@ public class AStarFinder {
      */
     public long testCalculationTime() {
         openNodes.add(start);
-        getWay();
+        searchPath();
         return time;
     }
 
@@ -156,40 +124,10 @@ public class AStarFinder {
      *
      * @return {@link List<Location>}
      */
-    public List<Location> getPath() {
+    public List<Location> getSearchPath() {
         openNodes.add(start);
-        if (!getWay()) return new ArrayList<>();
+        if (!searchPath()) return new ArrayList<>();
         return Arrays.asList(path);
-    }
-
-    /**
-     * 导航视觉指引提示
-     */
-    private void visual() {
-        if (!SearchPathManager.getVisual().contains(player.getUniqueId())) {
-            BukkitRunnable task = Main.dragonCore ?  new DCoreNavigationTask(player, Arrays.asList(path), target, npc) : new NavigationTask(player, Arrays.asList(path), target, npc);
-            task.runTaskTimerAsynchronously(Main.getInstance(), 0, Main.dragonCore ? 2 : 10);
-            SearchPathManager.getFindTask().put(player.getUniqueId(), task);
-            return;
-        }
-
-        TextComponent text = new TextComponent("§a聊天框输入 #cancel 取消粒子效果或点击: ");
-        TextComponent button = new TextComponent("§3§l[§a取消§3§l]");
-        player.sendMessage(" ");
-        player.sendMessage("§6已探索路径节点：" + closeNodes.size());
-        player.sendMessage("§6列队中路径节点: " + openNodes.size());
-        player.sendMessage("§6最优路径长度: " + path.length);
-        button.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pf cancel"));
-        button.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§a点击取消").create()));
-        text.addExtra(button);
-        player.spigot().sendMessage(text);
-        player.sendMessage(" ");
-
-        BukkitRunnable task = Main.dragonCore ? new DCoreDemoTask(player, openNodes, closeNodes, Arrays.asList(path)) : new ParticleDemoTask(player, openNodes, closeNodes, Arrays.asList(path));
-        task.runTaskTimerAsynchronously(Main.getInstance(), 0, 5);
-        SearchPathManager.addDemoTaskID(player, task);
-
-        if (npc != null) SearchPathManager.getGlow().put(player.getUniqueId(), npc);
     }
 
     /**
@@ -197,7 +135,7 @@ public class AStarFinder {
      *
      * @return boolean
      */
-    private boolean getWay() {
+    public boolean searchPath() {
         long a = System.currentTimeMillis();
         while (!openNodes.isEmpty()) {
 
@@ -229,19 +167,12 @@ public class AStarFinder {
                 long b = System.currentTimeMillis();
                 time = b - a;
 
-                MegumiUtil.debug(player, "§a已找到路径用时: " + time + " ms");
-                MegumiUtil.debug(player, "§6路径长度: " + path.length);
-                MegumiUtil.debug(player, "§6已探索路径节点：" + closeNodes.size());
-                MegumiUtil.debug(player, "§6列队中路径节点: " + openNodes.size());
-
                 return true;
             }
 
             closeNodes.add(current);
             explore(current);
         }
-
-        MegumiUtil.debug(player, "§c未找到路径");
 
         return false;
     }
@@ -263,59 +194,6 @@ public class AStarFinder {
      * @param node 路径点
      */
     private void explore(PathNode node) {
-        /*boolean w = false;
-        boolean s = false;
-        boolean a = false;
-        boolean d = false;
-
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                for (int z = -1; z <= 1; z++) {
-                    if ((x == 0 && (y == 0 || y == -1) && z == 0) || x * z != 0) continue;
-                    Location loc = node.getLocation().clone().add(x, y, z);
-
-                    if (!canStandAt(loc)) continue;
-
-                    if (x == 1 && z == 0) d = true;
-                    if (x == -1 && z == 0) a = true;
-                    if (x == 0 && z == 1) w = true;
-                    if (x == 0 && z == -1) s = true;
-
-                    addNeighborNode(loc, node, y != 0 ? 1.4142 : 1);
-                }
-            }
-        }
-
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                for (int z = -1; z <= 1; z++) {
-                    if ((x == 0 && (y == 0 || y == -1) && z == 0) || x * z == 0) continue;
-                    Location loc = node.getLocation().clone().add(x, y, z);
-
-                    if (!canStandAt(loc)) continue;
-
-                    if (x == 1 && z == 1 && (w || d)) {
-                        addNeighborNode(loc, node, y == 0 ? 1.4142 : 1.732);
-                        continue;
-                    }
-
-                    if (x == -1 && z == 1 && (w || a)) {
-                        addNeighborNode(loc, node, y == 0 ? 1.4142 : 1.732);
-                        continue;
-                    }
-
-                    if (x == -1 && z == -1 && (s || a)) {
-                        addNeighborNode(loc, node, y == 0 ? 1.4142 : 1.732);
-                        continue;
-                    }
-
-                    if (x == 1 && z == -1 && (s || d)) {
-                        addNeighborNode(loc, node, y == 0 ? 1.4142 : 1.732);
-                    }
-                }
-            }
-        }*/
-
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
@@ -357,8 +235,7 @@ public class AStarFinder {
         expense = parent.getExpense() + expense;
 
         if (child == null) {
-            /*child = new PathNode(loc, parent, expense, loc.distance(target));*/
-            child = new PathNode(loc, parent, expense, getDistance(loc, target));
+            child = new PathNode(loc, parent, expense, getDistance(loc, destination));
             openNodes.add(child);
             return;
         }

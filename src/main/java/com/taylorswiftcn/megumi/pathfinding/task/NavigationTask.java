@@ -57,7 +57,7 @@ public class NavigationTask extends BukkitRunnable {
             return;
         }
 
-        int distance = BigDecimal.valueOf(player.getLocation().distance(npc.getLocation())).setScale(0, BigDecimal.ROUND_DOWN).intValue();
+        int distance = BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN).intValue();
 
         if (distance < 2) {
             if (npc != null) EntityGlowUtil.unGlow(player, npc);

@@ -25,7 +25,8 @@ import java.util.UUID;
 public class SearchPathManager {
 
     private static Main plugin = Main.getInstance();
-    @Getter private static HashMap<UUID, BukkitRunnable> findTask = new HashMap<>();
+    @Getter
+    private static HashMap<UUID, BukkitRunnable> findTask = new HashMap<>();
     @Getter private static List<UUID> visual = new ArrayList<>();
     @Getter private static HashMap<UUID, BukkitRunnable> demo = new HashMap<>();
     @Getter private static HashMap<UUID, Entity> glow = new HashMap<>();

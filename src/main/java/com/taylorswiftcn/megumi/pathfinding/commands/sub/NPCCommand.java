@@ -2,7 +2,7 @@ package com.taylorswiftcn.megumi.pathfinding.commands.sub;
 
 import com.taylorswiftcn.megumi.pathfinding.Main;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
-import com.taylorswiftcn.megumi.pathfinding.algorithm.astar.AStarFinder;
+import com.taylorswiftcn.megumi.pathfinding.api.PlayerNavigation;
 import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
 import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
@@ -56,8 +56,8 @@ public class NPCCommand extends MegumiCommand {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    AStarFinder finder = new AStarFinder(player, player.getLocation(), npc.getEntity().getLocation().clone(), npc.getEntity());
-                    finder.navigation();
+                    PlayerNavigation nav = new PlayerNavigation(player, npc.getEntity().getLocation().clone(), npc.getEntity(), -1);
+                    nav.start();
                 }
             }.runTaskAsynchronously(getPlugin());
             return;
@@ -96,8 +96,8 @@ public class NPCCommand extends MegumiCommand {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    AStarFinder finder = new AStarFinder(player, player.getLocation(), npc.getEntity().getLocation().clone(), npc.getEntity());
-                    finder.navigation();
+                    PlayerNavigation nav = new PlayerNavigation(player, npc.getEntity().getLocation().clone(), npc.getEntity(), -1);
+                    nav.start();
                 }
             }.runTaskAsynchronously(getPlugin());
         }

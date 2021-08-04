@@ -3,6 +3,7 @@ package com.taylorswiftcn.megumi.pathfinding.algorithm.astar;
 import com.taylorswiftcn.megumi.pathfinding.Main;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.waypoint.DjikstraFinder;
+import com.taylorswiftcn.megumi.pathfinding.api.PathNavigation;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.task.NavigationTask;
 import com.taylorswiftcn.megumi.pathfinding.util.MegumiUtil;
@@ -71,8 +72,8 @@ public class MultiPointFinder {
                 continue;
             }
 
-            AStarFinder finder = new AStarFinder(player, current, loc);
-            List<Location> locations = finder.getPath();
+            PathNavigation nav = new PathNavigation(current, loc, -1);
+            List<Location> locations = nav.start();
             if (locations.size() == 0) {
                 path.clear();
                 player.sendMessage(ConfigFile.Prefix + "§cError");

@@ -1,7 +1,7 @@
 package com.taylorswiftcn.megumi.pathfinding.algorithm.waypoint.constructor;
 
 import com.taylorswiftcn.megumi.pathfinding.Main;
-import com.taylorswiftcn.megumi.pathfinding.algorithm.astar.AStarFinder;
+import com.taylorswiftcn.megumi.pathfinding.api.PathNavigation;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.util.LocationUtil;
 import lombok.Data;
@@ -66,8 +66,8 @@ public class WorldMap {
             double distance = site.distance(location);
             if (distance > 75) continue;
 
-            AStarFinder astar = new AStarFinder(null, location, site);
-            long time = astar.testCalculationTime();
+            PathNavigation nav = new PathNavigation(location, site, -1);
+            long time = nav.testCalculationTime();
 
             if (time > 20L) continue;
 

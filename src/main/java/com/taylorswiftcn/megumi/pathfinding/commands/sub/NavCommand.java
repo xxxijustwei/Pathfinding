@@ -1,7 +1,7 @@
 package com.taylorswiftcn.megumi.pathfinding.commands.sub;
 
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
-import com.taylorswiftcn.megumi.pathfinding.algorithm.astar.AStarFinder;
+import com.taylorswiftcn.megumi.pathfinding.api.PlayerNavigation;
 import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
 import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
@@ -46,8 +46,8 @@ public class NavCommand extends MegumiCommand {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    AStarFinder finder = new AStarFinder(player, player.getLocation(), location);
-                    finder.navigation();
+                    PlayerNavigation nav = new PlayerNavigation(player, location, null, -1);
+                    nav.start();
                 }
             }.runTaskAsynchronously(getPlugin());
             return;
@@ -84,8 +84,8 @@ public class NavCommand extends MegumiCommand {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    AStarFinder finder = new AStarFinder(player, player.getLocation(), location);
-                    finder.navigation();
+                    PlayerNavigation nav = new PlayerNavigation(player, location, null, -1);
+                    nav.start();
                 }
             }.runTaskAsynchronously(getPlugin());
         }

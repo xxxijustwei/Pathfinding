@@ -1,19 +1,13 @@
 package com.taylorswiftcn.megumi.pathfinding.task;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-import com.taylorswiftcn.megumi.pathfinding.Main;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
 import com.taylorswiftcn.megumi.pathfinding.util.special.EntityGlowUtil;
 import eos.moe.dragoncore.api.CoreAPI;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.math.BigDecimal;
@@ -69,7 +63,7 @@ public class DCoreNavigationTask extends BukkitRunnable {
             return;
         }
 
-        int distance = BigDecimal.valueOf(player.getLocation().distance(npc.getLocation())).setScale(0, BigDecimal.ROUND_DOWN).intValue();
+        int distance = BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN).intValue();
 
         if (distance < 2) {
             delView();
