@@ -1,6 +1,7 @@
 package com.taylorswiftcn.megumi.pathfinding.api.event;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -9,6 +10,7 @@ import org.bukkit.event.HandlerList;
 
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class PlayerNavStartedEvent extends Event {
 
@@ -31,6 +33,6 @@ public class PlayerNavStartedEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return null;
+        return handlerList;
     }
 }

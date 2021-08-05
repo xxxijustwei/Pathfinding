@@ -1,5 +1,7 @@
 package com.taylorswiftcn.megumi.pathfinding.api.event;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -7,7 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-@Getter
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class PlayerNavStartEvent extends Event {
 
     private Player player;
