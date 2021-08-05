@@ -72,7 +72,7 @@ public class MultiPointFinder {
                 continue;
             }
 
-            PathNavigation nav = new PathNavigation(current, loc, -1);
+            PathNavigation nav = new PathNavigation(current, loc);
             List<Location> locations = nav.start();
             if (locations.size() == 0) {
                 path.clear();

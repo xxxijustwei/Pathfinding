@@ -46,7 +46,7 @@ public class NavCommand extends MegumiCommand {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PlayerNavigation nav = new PlayerNavigation(player, location, null, -1);
+                    PlayerNavigation nav = new PlayerNavigation(player, location);
                     nav.start();
                 }
             }.runTaskAsynchronously(getPlugin());
@@ -84,7 +84,7 @@ public class NavCommand extends MegumiCommand {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PlayerNavigation nav = new PlayerNavigation(player, location, null, -1);
+                    PlayerNavigation nav = new PlayerNavigation(player, location);
                     nav.start();
                 }
             }.runTaskAsynchronously(getPlugin());

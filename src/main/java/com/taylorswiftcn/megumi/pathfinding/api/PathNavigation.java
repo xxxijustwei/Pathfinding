@@ -10,6 +10,9 @@ import java.util.List;
 
 public class PathNavigation extends AStarNavFinder {
 
+    public PathNavigation(Location origin, Location destination) {
+        this(origin, destination, -1);
+    }
 
     public PathNavigation(Location origin, Location destination, int openNodeLimit) {
         super(origin, destination, null, openNodeLimit);

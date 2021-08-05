@@ -44,6 +44,16 @@ public class SearchPathManager {
         }
     }
 
+    public static void cancelNav(Player player) {
+        UUID uuid = player.getUniqueId();
+        if (!findTask.containsKey(uuid)) return;
+
+        BukkitRunnable task = findTask.get(uuid);
+        task.cancel();
+
+        findTask.remove(uuid);
+    }
+
     public static void addDemoTaskID(Player player, BukkitRunnable task) {
         UUID uuid = player.getUniqueId();
         if (demo.containsKey(uuid)) {

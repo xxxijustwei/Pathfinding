@@ -56,7 +56,7 @@ public class NPCCommand extends MegumiCommand {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PlayerNavigation nav = new PlayerNavigation(player, npc.getEntity().getLocation().clone(), npc.getEntity(), -1);
+                    PlayerNavigation nav = new PlayerNavigation(player, npc.getEntity().getLocation().clone(), npc.getEntity());
                     nav.start();
                 }
             }.runTaskAsynchronously(getPlugin());
@@ -96,7 +96,7 @@ public class NPCCommand extends MegumiCommand {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PlayerNavigation nav = new PlayerNavigation(player, npc.getEntity().getLocation().clone(), npc.getEntity(), -1);
+                    PlayerNavigation nav = new PlayerNavigation(player, npc.getEntity().getLocation().clone(), npc.getEntity());
                     nav.start();
                 }
             }.runTaskAsynchronously(getPlugin());

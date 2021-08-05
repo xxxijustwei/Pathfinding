@@ -3,6 +3,8 @@ package com.taylorswiftcn.megumi.pathfinding.api;
 import com.taylorswiftcn.megumi.pathfinding.Main;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.astar.AStarNavFinder;
+import com.taylorswiftcn.megumi.pathfinding.api.event.PlayerNavStartEvent;
+import com.taylorswiftcn.megumi.pathfinding.api.event.PlayerNavStartedEvent;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
 import com.taylorswiftcn.megumi.pathfinding.task.DCoreDemoTask;
@@ -13,6 +15,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -26,6 +29,14 @@ public class PlayerNavigation extends AStarNavFinder {
 
     private Player player;
 
+    public PlayerNavigation(Player player, Location destination) {
+        this(player, destination, null);
+    }
+
+    public PlayerNavigation(Player player, Location destination, Entity npc) {
+        this(player, destination, npc, -1);
+    }
+
     public PlayerNavigation(Player player, Location destination, Entity npc, int openNodeLimit) {
         super(player.getLocation(), destination, npc, openNodeLimit);
         this.player = player;
@@ -33,6 +44,17 @@ public class PlayerNavigation extends AStarNavFinder {
 
     @Override
     public List<Location> start() {
+        PlayerNavStartEvent start = new PlayerNavStartEvent(player, getOrigin(), getDestination(), getNpc(), getOpenNodeLimit());
+        Bukkit.getPluginManager().callEvent(start);
+        if (start.isCancel()) {
+            return new ArrayList<>();
+        }
+
+        setOrigin(start.getOrigin());
+        setDestination(start.getDestination());
+        setNpc(start.getNpc());
+        setOpenNodeLimit(start.getOpenNodeLimit());
+
         SearchPathManager.sendNavTitle(player);
 
         if (!searchPath()) {
@@ -40,8 +62,15 @@ public class PlayerNavigation extends AStarNavFinder {
             return new ArrayList<>();
         }
 
+        List<Location> path = Arrays.asList(getPath());
+
+        PlayerNavStartedEvent started = new PlayerNavStartedEvent(player, path, getNpc());
+        Bukkit.getPluginManager().callEvent(started);
+        if (started.isCancel()) return path;
+
         visual();
-        return Arrays.asList(getPath());
+
+        return path;
     }
 
     private void visual() {
