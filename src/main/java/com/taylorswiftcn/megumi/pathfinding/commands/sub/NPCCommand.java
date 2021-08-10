@@ -43,7 +43,7 @@ public class NPCCommand extends MegumiCommand {
                 return;
             }
 
-            if (!player.getLocation().getWorld().equals(npc.getEntity().getLocation().getWorld())) {
+            if (!player.getLocation().getWorld().equals(npc.getStoredLocation().getWorld())) {
                 player.sendMessage(ConfigFile.Prefix + MessageFile.notSameWorldNPC);
                 return;
             }
@@ -56,7 +56,7 @@ public class NPCCommand extends MegumiCommand {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PlayerNavigation nav = new PlayerNavigation(player, npc.getEntity().getLocation().clone(), npc.getEntity());
+                    PlayerNavigation nav = new PlayerNavigation(player, npc.getStoredLocation().clone(), npc.getEntity());
                     nav.start();
                 }
             }.runTaskAsynchronously(getPlugin());
@@ -83,7 +83,7 @@ public class NPCCommand extends MegumiCommand {
                 return;
             }
 
-            if (!player.getLocation().getWorld().equals(npc.getEntity().getLocation().getWorld())) {
+            if (!player.getLocation().getWorld().equals(npc.getStoredLocation().getWorld())) {
                 CommandSender.sendMessage(ConfigFile.Prefix + MessageFile.notSameWorldNPC);
                 return;
             }
@@ -96,7 +96,7 @@ public class NPCCommand extends MegumiCommand {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PlayerNavigation nav = new PlayerNavigation(player, npc.getEntity().getLocation().clone(), npc.getEntity());
+                    PlayerNavigation nav = new PlayerNavigation(player, npc.getStoredLocation().clone(), npc.getEntity());
                     nav.start();
                 }
             }.runTaskAsynchronously(getPlugin());

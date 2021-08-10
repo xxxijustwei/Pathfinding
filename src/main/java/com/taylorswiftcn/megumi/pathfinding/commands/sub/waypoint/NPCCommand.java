@@ -27,7 +27,7 @@ public class NPCCommand extends MegumiCommand {
             return;
         }
 
-        if (!player.getLocation().getWorld().equals(npc.getEntity().getLocation().getWorld())) {
+        if (!player.getLocation().getWorld().equals(npc.getStoredLocation().getWorld())) {
             player.sendMessage(ConfigFile.Prefix + MessageFile.notSameWorldNPC);
             return;
         }
