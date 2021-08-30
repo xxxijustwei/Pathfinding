@@ -17,11 +17,13 @@ public class ConfigFile {
         public static Boolean actionBar;
         public static Boolean hologram;
         public static Boolean title;
+        public static Boolean autoMode;
     }
 
     public static class Base {
         public static Integer mode;
         public static Integer openNodeCount;
+        public static Integer autoDistance;
     }
 
     public static class Tips {

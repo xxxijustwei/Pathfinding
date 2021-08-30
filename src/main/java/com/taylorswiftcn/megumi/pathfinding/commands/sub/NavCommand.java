@@ -1,7 +1,7 @@
 package com.taylorswiftcn.megumi.pathfinding.commands.sub;
 
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
-import com.taylorswiftcn.megumi.pathfinding.api.PlayerNavigation;
+import com.taylorswiftcn.megumi.pathfinding.api.NavigationAPI;
 import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
 import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class NavCommand extends MegumiCommand {
     @Override
@@ -43,13 +42,7 @@ public class NavCommand extends MegumiCommand {
                 SearchPathManager.getFindTask().remove(player.getUniqueId());
             }
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    PlayerNavigation nav = new PlayerNavigation(player, location);
-                    nav.start();
-                }
-            }.runTaskAsynchronously(getPlugin());
+            NavigationAPI.asyncNavPlayer(player, location, null);
             return;
         }
 
@@ -81,13 +74,7 @@ public class NavCommand extends MegumiCommand {
                 SearchPathManager.getFindTask().remove(player.getUniqueId());
             }
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    PlayerNavigation nav = new PlayerNavigation(player, location);
-                    nav.start();
-                }
-            }.runTaskAsynchronously(getPlugin());
+            NavigationAPI.asyncNavPlayer(player, location, null);
         }
     }
 

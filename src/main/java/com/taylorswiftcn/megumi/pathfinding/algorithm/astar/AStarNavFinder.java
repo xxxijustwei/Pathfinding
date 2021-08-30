@@ -25,6 +25,11 @@ public abstract class AStarNavFinder {
     private Location destination;
 
     /**
+     * 模式
+     */
+    private Integer mode;
+
+    /**
      * NPC
      */
     private Entity npc;
@@ -65,37 +70,41 @@ public abstract class AStarNavFinder {
     private long time;
 
     /**
-     * AstarFinder
+     * AstarNavFinder
      *
-     * @param origin 起点
+     * @param origin      起点
      * @param destination 终点
+     * @param mode        模式
      */
-    public AStarNavFinder(Location origin, Location destination) {
-        this(origin, destination, null);
+    public AStarNavFinder(Location origin, Location destination, Integer mode) {
+        this(origin, destination, mode, null);
     }
 
     /**
-     * AstarFinder
+     * AstarNavFinder
      *
-     * @param origin 起点
+     * @param origin      起点
      * @param destination 终点
-     * @param npc    NPC
+     * @param npc         NPC
+     * @param mode        模式
      */
-    public AStarNavFinder(Location origin, Location destination, Entity npc) {
-        this(origin, destination, npc, -1);
+    public AStarNavFinder(Location origin, Location destination, Integer mode, Entity npc) {
+        this(origin, destination, mode, npc, -1);
     }
 
     /**
-     * 斯达仪
+     * AstarNavFinder
      *
-     * @param origin 起点
-     * @param destination 终点
-     * @param npc    NPC
+     * @param origin        起点
+     * @param destination   终点
+     * @param npc           NPC
      * @param openNodeLimit 开放节点数量限制
+     * @param mode          模式
      */
-    public AStarNavFinder(Location origin, Location destination, Entity npc, int openNodeLimit) {
+    public AStarNavFinder(Location origin, Location destination, Integer mode, Entity npc, int openNodeLimit) {
         this.origin = origin;
         this.destination = destination;
+        this.mode = mode;
         this.start = new PathNode(origin, null, 0, origin.distance(destination));
         this.end = new PathNode(origin, null, 0, 0);
         this.openNodes = new PriorityQueue<>();
@@ -341,7 +350,7 @@ public abstract class AStarNavFinder {
      * @return double
      */
     private double getDistance(Location locA, Location locB) {
-        if (ConfigFile.Base.mode == 1) return getEuclideanDistance(locA, locB);
+        if (mode == 1) return getEuclideanDistance(locA, locB);
         return getManhattanDistance(locA, locB);
     }
 

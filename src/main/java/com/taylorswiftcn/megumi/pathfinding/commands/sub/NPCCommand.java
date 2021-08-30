@@ -2,6 +2,7 @@ package com.taylorswiftcn.megumi.pathfinding.commands.sub;
 
 import com.taylorswiftcn.megumi.pathfinding.Main;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
+import com.taylorswiftcn.megumi.pathfinding.api.NavigationAPI;
 import com.taylorswiftcn.megumi.pathfinding.api.PlayerNavigation;
 import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
 import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
@@ -53,13 +54,7 @@ public class NPCCommand extends MegumiCommand {
                 SearchPathManager.getFindTask().remove(player.getUniqueId());
             }
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    PlayerNavigation nav = new PlayerNavigation(player, npc.getStoredLocation().clone(), npc.getEntity());
-                    nav.start();
-                }
-            }.runTaskAsynchronously(getPlugin());
+            NavigationAPI.asyncNavPlayer(player, npc.getStoredLocation().clone(), npc.getEntity());
             return;
         }
 
@@ -93,13 +88,7 @@ public class NPCCommand extends MegumiCommand {
                 SearchPathManager.getFindTask().remove(player.getUniqueId());
             }
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    PlayerNavigation nav = new PlayerNavigation(player, npc.getStoredLocation().clone(), npc.getEntity());
-                    nav.start();
-                }
-            }.runTaskAsynchronously(getPlugin());
+            NavigationAPI.asyncNavPlayer(player, npc.getStoredLocation().clone(), npc.getEntity());
         }
     }
 

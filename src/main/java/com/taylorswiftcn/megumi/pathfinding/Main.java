@@ -43,7 +43,6 @@ public class Main extends JavaPlugin {
         fileManager.init();
 
         initHook();
-        load();
 
         /*WayPointHandler.init();*/
 
@@ -82,19 +81,5 @@ public class Main extends JavaPlugin {
 
         fileManager.init();
         dragonCore = ConfigFile.Enable.dragonCore && Bukkit.getPluginManager().getPlugin("DragonCore") != null;
-        load();
-    }
-
-    public void load() {
-        ConfigurationSection section = fileManager.getCoord().getConfigurationSection("");
-        if (section == null) return;
-        for (String s : section.getKeys(false)) {
-            String world = section.getString(s + ".World");
-            double x = section.getDouble(s + ".X");
-            double y = section.getDouble(s + ".Y");
-            double z = section.getDouble(s + ".Z");
-
-            coord.put(s, new Location(Bukkit.getWorld(world), x, y, z));
-        }
     }
 }

@@ -5,7 +5,9 @@ import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
 import com.taylorswiftcn.megumi.pathfinding.util.MegumiUtil;
 import com.taylorswiftcn.megumi.pathfinding.Main;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -27,6 +29,7 @@ public class FileManager {
 
         ConfigFile.init();
         MessageFile.init();
+        load();
     }
 
     private YamlConfiguration initFile(String name) {
@@ -38,6 +41,19 @@ public class FileManager {
         }
         else MegumiUtil.log(String.format("§3File: 已加载 %s 文件", name));
         return YamlConfiguration.loadConfiguration(file);
+    }
+
+    public void load() {
+        ConfigurationSection section = plugin.getFileManager().getCoord().getConfigurationSection("");
+        if (section == null) return;
+        for (String s : section.getKeys(false)) {
+            String world = section.getString(s + ".World");
+            double x = section.getDouble(s + ".X");
+            double y = section.getDouble(s + ".Y");
+            double z = section.getDouble(s + ".Z");
+
+            plugin.getCoord().put(s, new Location(Bukkit.getWorld(world), x, y, z));
+        }
     }
 
     public void add(String id, Location location) {

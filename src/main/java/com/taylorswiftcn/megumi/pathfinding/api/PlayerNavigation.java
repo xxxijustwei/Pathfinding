@@ -29,16 +29,16 @@ public class PlayerNavigation extends AStarNavFinder {
 
     private Player player;
 
-    public PlayerNavigation(Player player, Location destination) {
-        this(player, destination, null);
+    public PlayerNavigation(Player player, Location destination, int mode) {
+        this(player, destination, mode, null);
     }
 
-    public PlayerNavigation(Player player, Location destination, Entity npc) {
-        this(player, destination, npc, -1);
+    public PlayerNavigation(Player player, Location destination, int mode, Entity npc) {
+        this(player, destination, mode, npc, -1);
     }
 
-    public PlayerNavigation(Player player, Location destination, Entity npc, int openNodeLimit) {
-        super(player.getLocation(), destination, npc, openNodeLimit);
+    public PlayerNavigation(Player player, Location destination, int mode, Entity npc, int openNodeLimit) {
+        super(player.getLocation(), destination, mode, npc, openNodeLimit);
         this.player = player;
     }
 

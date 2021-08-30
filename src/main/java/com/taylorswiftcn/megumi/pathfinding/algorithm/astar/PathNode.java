@@ -23,14 +23,6 @@ public class PathNode implements Comparable<PathNode> {
         return expense + distance;
     }
 
-    public boolean isObstructed(Location location) {
-        return false;
-    }
-
-    public boolean canPass(Location location) {
-        return false;
-    }
-
     public int compareTo(PathNode node) {
         if (node == null) return -1;
         if (getPriority() > node.getPriority()) return 1;

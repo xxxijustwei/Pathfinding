@@ -72,7 +72,9 @@ public class MultiPointFinder {
                 continue;
             }
 
-            PathNavigation nav = new PathNavigation(current, loc);
+            int mode = MegumiUtil.getNavMode(current, loc);
+
+            PathNavigation nav = new PathNavigation(current, loc, mode);
             List<Location> locations = nav.start();
             if (locations.size() == 0) {
                 path.clear();

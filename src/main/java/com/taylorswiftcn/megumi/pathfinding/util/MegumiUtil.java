@@ -3,6 +3,7 @@ package com.taylorswiftcn.megumi.pathfinding.util;
 import com.taylorswiftcn.megumi.pathfinding.Main;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -98,5 +99,17 @@ public class MegumiUtil {
         if (player == null || (!player.isOp())) return;
         if (!ConfigFile.Enable.debug) return;
         player.sendMessage(ConfigFile.Prefix + msg);
+    }
+
+    public static int getNavMode(Location locA, Location locB) {
+        int mode = ConfigFile.Base.mode;
+        if (ConfigFile.Enable.autoMode) {
+            double distance = locA.distance(locB);
+            if (distance >= ConfigFile.Base.autoDistance) {
+                mode = 0;
+            }
+        }
+
+        return mode;
     }
 }

@@ -66,7 +66,7 @@ public class WorldMap {
             double distance = site.distance(location);
             if (distance > 75) continue;
 
-            PathNavigation nav = new PathNavigation(location, site);
+            PathNavigation nav = new PathNavigation(location, site, 1);
             long time = nav.testCalculationTime();
 
             if (time > 20L) continue;

@@ -12,6 +12,9 @@ Enable:
   #是否启用全息导航提示
   Title: true
   #是否启用title导航提示
+  AutoMode: false
+  #是否启用自动选择模式
+  #启用后请配置Base配置下的AutoDistance
 Base:
   Mode: 1
   #0 - 曼哈顿距离
@@ -22,6 +25,8 @@ Base:
   #最大队列中可探索路径点数量限制
   #如果路径计算中OpenNode节点数量超过该值就结束计算
   #debug模式下导航可以提示本次导航路径计算中OpenNode节点数量
+  AutoDistance: 500
+  #起点到终点的直线距离超过多远则使用曼哈顿模式
 Tips:
   ActionBar: '&a距离目标位置还有 %s% M'
   Hologram:
