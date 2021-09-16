@@ -38,6 +38,10 @@ public class PlayerNavStartEvent extends Event {
         this.cancel = false;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlerList;
+    }
+
     @Override
     public HandlerList getHandlers() {
         return handlerList;

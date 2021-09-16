@@ -42,8 +42,10 @@ public class ConfigFile {
         Enable.actionBar = config.getBoolean("Enable.ActionBar");
         Enable.hologram = config.getBoolean("Enable.Hologram");
         Enable.title = config.getBoolean("Enable.Title");
+        Enable.autoMode = config.getBoolean("Enable.AutoMode");
         Base.mode = config.getInt("Base.Mode");
         Base.openNodeCount = config.getInt("Base.OpenNodeLimit");
+        Base.autoDistance = config.getInt("Base.AutoDistance");
         Tips.actionBar = getString("Tips.ActionBar");
         Tips.hologram = getStringList("Tips.Hologram");
         Tips.title_theme = getString("Tips.Title.Theme");
