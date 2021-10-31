@@ -1,8 +1,9 @@
 package com.taylorswiftcn.megumi.pathfinding.api;
 
 import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
+import com.taylorswiftcn.megumi.pathfinding.algorithm.PathCallback;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
-import com.taylorswiftcn.megumi.pathfinding.algorithm.astar.AStarNavFinder;
+import com.taylorswiftcn.megumi.pathfinding.algorithm.astar.AStarFinder;
 import com.taylorswiftcn.megumi.pathfinding.api.event.PlayerNavStartEvent;
 import com.taylorswiftcn.megumi.pathfinding.api.event.PlayerNavStartedEvent;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
@@ -11,6 +12,7 @@ import com.taylorswiftcn.megumi.pathfinding.task.DCoreDemoTask;
 import com.taylorswiftcn.megumi.pathfinding.task.DCoreNavigationTask;
 import com.taylorswiftcn.megumi.pathfinding.task.NavigationTask;
 import com.taylorswiftcn.megumi.pathfinding.task.ParticleDemoTask;
+import com.taylorswiftcn.megumi.pathfinding.util.SchedulerUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -25,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayerNavigation extends AStarNavFinder {
+public class PlayerNavigation extends AStarFinder {
 
     private Player player;
 
@@ -42,35 +44,34 @@ public class PlayerNavigation extends AStarNavFinder {
         this.player = player;
     }
 
-    @Override
-    public List<Location> start() {
-        PlayerNavStartEvent start = new PlayerNavStartEvent(player, getOrigin(), getDestination(), getNpc(), getOpenNodeLimit());
-        Bukkit.getPluginManager().callEvent(start);
-        if (start.isCancel()) {
-            return new ArrayList<>();
-        }
+    public void start() {
+        SchedulerUtil.runAsync(() -> {
+            PlayerNavStartEvent start = new PlayerNavStartEvent(player, getOrigin(), getDestination(), getNpc(), getOpenNodeLimit());
+            Bukkit.getPluginManager().callEvent(start);
+            if (start.isCancel()) {
+                return;
+            }
 
-        setOrigin(start.getOrigin());
-        setDestination(start.getDestination());
-        setNpc(start.getNpc());
-        setOpenNodeLimit(start.getOpenNodeLimit());
+            setOrigin(start.getOrigin());
+            setDestination(start.getDestination());
+            setNpc(start.getNpc());
+            setOpenNodeLimit(start.getOpenNodeLimit());
 
-        SearchPathManager.sendNavTitle(player);
+            SearchPathManager.sendNavTitle(player);
 
-        if (!searchPath()) {
-            player.sendMessage(ConfigFile.Prefix + MessageFile.navFailure);
-            return new ArrayList<>();
-        }
+            if (!startSearch()) {
+                player.sendMessage(ConfigFile.Prefix + MessageFile.navFailure);
+                return;
+            }
 
-        List<Location> path = Arrays.asList(getPath());
+            List<Location> path = Arrays.asList(getPath());
 
-        PlayerNavStartedEvent started = new PlayerNavStartedEvent(player, path, getNpc());
-        Bukkit.getPluginManager().callEvent(started);
-        if (started.isCancel()) return path;
+            PlayerNavStartedEvent started = new PlayerNavStartedEvent(player, path, getNpc());
+            Bukkit.getPluginManager().callEvent(started);
+            if (started.isCancel()) return;
 
-        visual();
-
-        return path;
+            visual();
+        });
     }
 
     private void visual() {

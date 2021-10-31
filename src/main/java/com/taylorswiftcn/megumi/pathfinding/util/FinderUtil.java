@@ -3,7 +3,7 @@ package com.taylorswiftcn.megumi.pathfinding.util;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import org.bukkit.Location;
 
-public class PathFindUtil {
+public class FinderUtil {
 
     public static int getNavMode(Location locA, Location locB) {
         int mode = ConfigFile.Base.mode;

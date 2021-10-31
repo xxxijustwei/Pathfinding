@@ -1,5 +1,6 @@
 package com.taylorswiftcn.megumi.pathfinding.algorithm.astar;
 
+import com.taylorswiftcn.megumi.pathfinding.algorithm.PathCallback;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.util.MaterialUtil;
 import lombok.Data;
@@ -13,7 +14,7 @@ import org.bukkit.material.MaterialData;
 import java.util.*;
 
 @Data
-public abstract class AStarNavFinder {
+public abstract class AStarFinder {
 
     /**
      * 起点
@@ -76,7 +77,7 @@ public abstract class AStarNavFinder {
      * @param destination 终点
      * @param mode        模式
      */
-    public AStarNavFinder(Location origin, Location destination, Integer mode) {
+    public AStarFinder(Location origin, Location destination, Integer mode) {
         this(origin, destination, mode, null);
     }
 
@@ -88,7 +89,7 @@ public abstract class AStarNavFinder {
      * @param npc         NPC
      * @param mode        模式
      */
-    public AStarNavFinder(Location origin, Location destination, Integer mode, Entity npc) {
+    public AStarFinder(Location origin, Location destination, Integer mode, Entity npc) {
         this(origin, destination, mode, npc, -1);
     }
 
@@ -101,7 +102,7 @@ public abstract class AStarNavFinder {
      * @param openNodeLimit 开放节点数量限制
      * @param mode          模式
      */
-    public AStarNavFinder(Location origin, Location destination, Integer mode, Entity npc, int openNodeLimit) {
+    public AStarFinder(Location origin, Location destination, Integer mode, Entity npc, int openNodeLimit) {
         this.origin = origin;
         this.destination = destination;
         this.mode = mode;
@@ -115,8 +116,6 @@ public abstract class AStarNavFinder {
         this.openNodes.add(start);
     }
 
-    public abstract List<Location> start();
-
     /**
      * 测试导航路径计算时间
      *
@@ -124,7 +123,7 @@ public abstract class AStarNavFinder {
      */
     public long testCalculationTime() {
         openNodes.add(start);
-        searchPath();
+        startSearch();
         return time;
     }
 
@@ -135,7 +134,7 @@ public abstract class AStarNavFinder {
      */
     public List<Location> getSearchPath() {
         openNodes.add(start);
-        if (!searchPath()) return new ArrayList<>();
+        if (!startSearch()) return new ArrayList<>();
         return Arrays.asList(path);
     }
 
@@ -144,7 +143,7 @@ public abstract class AStarNavFinder {
      *
      * @return boolean
      */
-    public boolean searchPath() {
+    public boolean startSearch() {
         long a = System.currentTimeMillis();
         while (!openNodes.isEmpty()) {
 

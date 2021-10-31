@@ -55,7 +55,7 @@ public class NavCommand extends SubCommand {
                 SearchPathManager.getFindTask().remove(player.getUniqueId());
             }
 
-            NavigationAPI.asyncNavPlayer(player, location, null);
+            NavigationAPI.onNav2Player(player, location, null);
             return;
         }
 
@@ -87,7 +87,7 @@ public class NavCommand extends SubCommand {
                 SearchPathManager.getFindTask().remove(player.getUniqueId());
             }
 
-            NavigationAPI.asyncNavPlayer(player, location, null);
+            NavigationAPI.onNav2Player(player, location, null);
         }
     }
 

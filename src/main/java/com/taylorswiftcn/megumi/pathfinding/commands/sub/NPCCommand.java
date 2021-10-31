@@ -57,7 +57,7 @@ public class NPCCommand extends SubCommand {
                 SearchPathManager.getFindTask().remove(player.getUniqueId());
             }
 
-            NavigationAPI.asyncNavPlayer(player, npc.getStoredLocation().clone(), npc.getEntity());
+            NavigationAPI.onNav2Player(player, npc.getStoredLocation().clone(), npc.getEntity());
             return;
         }
 
@@ -91,7 +91,7 @@ public class NPCCommand extends SubCommand {
                 SearchPathManager.getFindTask().remove(player.getUniqueId());
             }
 
-            NavigationAPI.asyncNavPlayer(player, npc.getStoredLocation().clone(), npc.getEntity());
+            NavigationAPI.onNav2Player(player, npc.getStoredLocation().clone(), npc.getEntity());
         }
     }
 
