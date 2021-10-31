@@ -1,7 +1,7 @@
 package com.taylorswiftcn.megumi.pathfinding.algorithm.astar;
 
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
-import com.taylorswiftcn.megumi.pathfinding.util.special.MaterialUtil;
+import com.taylorswiftcn.megumi.pathfinding.util.MaterialUtil;
 import lombok.Data;
 import org.bukkit.Location;
 import org.bukkit.Material;

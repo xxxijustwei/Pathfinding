@@ -1,14 +1,18 @@
 package com.taylorswiftcn.megumi.pathfinding.commands.sub.coord;
 
-import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
-import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
 import org.bukkit.command.CommandSender;
 
-public class HelpCommand extends MegumiCommand {
+public class HelpCommand extends SubCommand {
     @Override
-    public void perform(CommandSender CommandSender, String[] Strings) {
-        MessageFile.coord.forEach(CommandSender::sendMessage);
+    public String getIdentifier() {
+        return "help";
+    }
+
+    @Override
+    public void perform(CommandSender sender, String[] args) {
+        MessageFile.coord.forEach(sender::sendMessage);
     }
 
     @Override
@@ -17,7 +21,7 @@ public class HelpCommand extends MegumiCommand {
     }
 
     @Override
-    public PermissionType getPT() {
+    public String getPermission() {
         return null;
     }
 }

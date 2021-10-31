@@ -1,7 +1,7 @@
 package com.taylorswiftcn.megumi.pathfinding.file.sub;
 
-import com.taylorswiftcn.megumi.pathfinding.Main;
-import com.taylorswiftcn.megumi.pathfinding.util.MegumiUtil;
+import com.taylorswiftcn.justwei.util.MegumiUtil;
+import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class ConfigFile {
     }
 
     public static void init() {
-        config = Main.getInstance().getFileManager().getConfig();
+        config = Pathfinding.getInstance().getFileManager().getConfig();
 
         Prefix = getString("Prefix");
         Enable.dragonCore = config.getBoolean("Enable.DragonCore");

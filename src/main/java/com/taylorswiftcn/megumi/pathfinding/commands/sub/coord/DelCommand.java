@@ -1,28 +1,40 @@
 package com.taylorswiftcn.megumi.pathfinding.commands.sub.coord;
 
-import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
-import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
+import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import org.bukkit.command.CommandSender;
 
-public class DelCommand extends MegumiCommand {
+public class DelCommand extends SubCommand {
+
+    private Pathfinding plugin;
+
+    public DelCommand() {
+        this.plugin = Pathfinding.getInstance();
+    }
+
     @Override
-    public void perform(CommandSender CommandSender, String[] Strings) {
-        if (Strings.length != 3) return;
+    public String getIdentifier() {
+        return "del";
+    }
 
-        String s = Strings[2];
+    @Override
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length != 1) return;
 
-        if (!getPlugin().getCoord().containsKey(s)) {
-            CommandSender.sendMessage(ConfigFile.Prefix + "§a没有该坐标!");
+        String s = args[0];
+
+        if (!plugin.getCoord().containsKey(s)) {
+            sender.sendMessage(ConfigFile.Prefix + "§a没有该坐标!");
             return;
         }
 
-        if (getPlugin().getCoord().containsKey(s)) {
-            getPlugin().getCoord().remove(s);
-            getPlugin().getFileManager().del(s);
+        if (plugin.getCoord().containsKey(s)) {
+            plugin.getCoord().remove(s);
+            plugin.getFileManager().del(s);
         }
 
-        CommandSender.sendMessage(ConfigFile.Prefix + "§a删除坐标成功!");
+        sender.sendMessage(ConfigFile.Prefix + "§a删除坐标成功!");
     }
 
     @Override
@@ -31,7 +43,7 @@ public class DelCommand extends MegumiCommand {
     }
 
     @Override
-    public PermissionType getPT() {
+    public String getPermission() {
         return null;
     }
 }

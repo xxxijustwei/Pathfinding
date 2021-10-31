@@ -1,9 +1,9 @@
 package com.taylorswiftcn.megumi.pathfinding.task;
 
+import com.taylorswiftcn.justwei.util.special.EntityGlow;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
-import com.taylorswiftcn.megumi.pathfinding.util.special.EntityGlowUtil;
 import eos.moe.dragoncore.api.CoreAPI;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -46,7 +46,7 @@ public class DCoreNavigationTask extends BukkitRunnable {
     @Override
     public synchronized void cancel() throws IllegalStateException {
         delView();
-        if (npc != null && glow) EntityGlowUtil.unGlow(player, npc);
+        if (npc != null && glow) EntityGlow.undoGlow(player, npc);
         super.cancel();
     }
 
@@ -67,7 +67,7 @@ public class DCoreNavigationTask extends BukkitRunnable {
 
         if (distance < 2) {
             delView();
-            if (npc != null) EntityGlowUtil.unGlow(player, npc);
+            if (npc != null) EntityGlow.undoGlow(player, npc);
             player.sendMessage(ConfigFile.Prefix + MessageFile.arriveCoord);
             cancel();
             return;
@@ -78,7 +78,7 @@ public class DCoreNavigationTask extends BukkitRunnable {
         }
 
         if (!glow && npc != null && distance < 32) {
-            EntityGlowUtil.glow(player, npc);
+            EntityGlow.doGlow(player, npc);
             glow = true;
         }
 

@@ -1,6 +1,6 @@
 package com.taylorswiftcn.megumi.pathfinding.listener;
 
-import com.taylorswiftcn.megumi.pathfinding.Main;
+import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class DemoListener implements Listener {
 
-    private Main plugin = Main.getInstance();
+    private Pathfinding plugin = Pathfinding.getInstance();
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {

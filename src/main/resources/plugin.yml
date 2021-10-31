@@ -1,9 +1,10 @@
 name: Pathfinding
-main: com.taylorswiftcn.megumi.pathfinding.Main
+main: com.taylorswiftcn.megumi.pathfinding.Pathfinding
 version: ${project.version}
 author: 'Megumi'
 api-version: '1.13'
 depend:
+  - MegumiLib
   - ProtocolLib
 softdepend:
   - DragonCore

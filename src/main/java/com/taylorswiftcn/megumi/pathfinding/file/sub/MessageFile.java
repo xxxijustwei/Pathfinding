@@ -1,7 +1,7 @@
 package com.taylorswiftcn.megumi.pathfinding.file.sub;
 
-import com.taylorswiftcn.megumi.pathfinding.Main;
-import com.taylorswiftcn.megumi.pathfinding.util.MegumiUtil;
+import com.taylorswiftcn.justwei.util.MegumiUtil;
+import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class MessageFile {
     public static String playerIsOffline;
 
     public static void init() {
-        message = Main.getInstance().getFileManager().getMessage();
+        message = Pathfinding.getInstance().getFileManager().getMessage();
 
         Help = getStringList("Help");
         AdminHelp = getStringList("AdminHelp");

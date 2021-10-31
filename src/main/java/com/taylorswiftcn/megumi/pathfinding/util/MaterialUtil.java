@@ -1,4 +1,4 @@
-package com.taylorswiftcn.megumi.pathfinding.util.special;
+package com.taylorswiftcn.megumi.pathfinding.util;
 
 import org.bukkit.Material;
 

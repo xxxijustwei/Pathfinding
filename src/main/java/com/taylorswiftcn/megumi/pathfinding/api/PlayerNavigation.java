@@ -1,6 +1,6 @@
 package com.taylorswiftcn.megumi.pathfinding.api;
 
-import com.taylorswiftcn.megumi.pathfinding.Main;
+import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.astar.AStarNavFinder;
 import com.taylorswiftcn.megumi.pathfinding.api.event.PlayerNavStartEvent;
@@ -75,8 +75,8 @@ public class PlayerNavigation extends AStarNavFinder {
 
     private void visual() {
         if (!SearchPathManager.getVisual().contains(player.getUniqueId())) {
-            BukkitRunnable task = Main.dragonCore ?  new DCoreNavigationTask(player, Arrays.asList(getPath()), getDestination(), getNpc()) : new NavigationTask(player, Arrays.asList(getPath()), getDestination(), getNpc());
-            task.runTaskTimerAsynchronously(Main.getInstance(), 0, Main.dragonCore ? 2 : 10);
+            BukkitRunnable task = Pathfinding.dragonCore ?  new DCoreNavigationTask(player, Arrays.asList(getPath()), getDestination(), getNpc()) : new NavigationTask(player, Arrays.asList(getPath()), getDestination(), getNpc());
+            task.runTaskTimerAsynchronously(Pathfinding.getInstance(), 0, Pathfinding.dragonCore ? 2 : 10);
             SearchPathManager.getFindTask().put(player.getUniqueId(), task);
             return;
         }
@@ -93,8 +93,8 @@ public class PlayerNavigation extends AStarNavFinder {
         player.spigot().sendMessage(text);
         player.sendMessage(" ");
 
-        BukkitRunnable task = Main.dragonCore ? new DCoreDemoTask(player, getOpenNodes(), getCloseNodes(), Arrays.asList(getPath())) : new ParticleDemoTask(player, getOpenNodes(), getCloseNodes(), Arrays.asList(getPath()));
-        task.runTaskTimerAsynchronously(Main.getInstance(), 0, 5);
+        BukkitRunnable task = Pathfinding.dragonCore ? new DCoreDemoTask(player, getOpenNodes(), getCloseNodes(), Arrays.asList(getPath())) : new ParticleDemoTask(player, getOpenNodes(), getCloseNodes(), Arrays.asList(getPath()));
+        task.runTaskTimerAsynchronously(Pathfinding.getInstance(), 0, 5);
         SearchPathManager.addDemoTaskID(player, task);
 
         if (getNpc() != null) SearchPathManager.getGlow().put(player.getUniqueId(), getNpc());

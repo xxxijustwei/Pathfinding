@@ -1,28 +1,40 @@
 package com.taylorswiftcn.megumi.pathfinding.commands.sub.coord;
 
-import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
-import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
+import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class AddCommand extends MegumiCommand {
-    @Override
-    public void perform(CommandSender CommandSender, String[] Strings) {
-        if (Strings.length != 3) return;
+public class AddCommand extends SubCommand {
 
-        String s = Strings[2];
+    private Pathfinding plugin;
+
+    public AddCommand() {
+        this.plugin = Pathfinding.getInstance();
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "add";
+    }
+
+    @Override
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length != 1) return;
+
+        String s = args[0];
         Player player = getPlayer();
 
-        if (getPlugin().getCoord().containsKey(s)) {
-            CommandSender.sendMessage(ConfigFile.Prefix + "§a该坐标已存在!");
+        if (plugin.getCoord().containsKey(s)) {
+            sender.sendMessage(ConfigFile.Prefix + "§a该坐标已存在!");
             return;
         }
 
-        getPlugin().getFileManager().add(s, player.getLocation());
-        getPlugin().getCoord().put(s, player.getLocation());
+        plugin.getFileManager().add(s, player.getLocation());
+        plugin.getCoord().put(s, player.getLocation());
 
-        CommandSender.sendMessage(ConfigFile.Prefix + "§a添加坐标成功!");
+        sender.sendMessage(ConfigFile.Prefix + "§a添加坐标成功!");
     }
 
     @Override
@@ -31,7 +43,7 @@ public class AddCommand extends MegumiCommand {
     }
 
     @Override
-    public PermissionType getPT() {
+    public String getPermission() {
         return null;
     }
 }

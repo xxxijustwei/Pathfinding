@@ -3,10 +3,10 @@ package com.taylorswiftcn.megumi.pathfinding.algorithm;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
-import com.taylorswiftcn.megumi.pathfinding.Main;
+import com.taylorswiftcn.justwei.util.message.ActionBar;
+import com.taylorswiftcn.justwei.util.special.EntityGlow;
+import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
-import com.taylorswiftcn.megumi.pathfinding.util.message.ActionBarUtil;
-import com.taylorswiftcn.megumi.pathfinding.util.special.EntityGlowUtil;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
@@ -24,7 +24,7 @@ import java.util.UUID;
 
 public class SearchPathManager {
 
-    private static Main plugin = Main.getInstance();
+    private static Pathfinding plugin = Pathfinding.getInstance();
     @Getter
     private static HashMap<UUID, BukkitRunnable> findTask = new HashMap<>();
     @Getter private static List<UUID> visual = new ArrayList<>();
@@ -71,7 +71,7 @@ public class SearchPathManager {
         task.cancel();
         demo.remove(uuid);
         if (glow.containsKey(uuid)) {
-            EntityGlowUtil.unGlow(player, glow.get(uuid));
+            EntityGlow.doGlow(player, glow.get(uuid));
         }
         player.sendMessage(ConfigFile.Prefix + "§a已取消");
     }
@@ -83,18 +83,18 @@ public class SearchPathManager {
 
     public static void sendNavActionBar(Player player, int distance) {
         if (!ConfigFile.Enable.actionBar) return;
-        ActionBarUtil.sendActionBar(player, ConfigFile.Tips.actionBar.replace("%s%", String.valueOf(distance)));
+        ActionBar.sendActionBar(player, ConfigFile.Tips.actionBar.replace("%s%", String.valueOf(distance)));
     }
 
     public static void createHologram(Player player, Location target) {
-        if (!(ConfigFile.Enable.hologram && Main.hologram)) return;
+        if (!(ConfigFile.Enable.hologram && Pathfinding.hologram)) return;
 
         UUID uuid = player.getUniqueId();
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                Hologram hologram = HologramsAPI.createHologram(Main.getInstance(), target.clone().add(0, 1.6, 0));
+                Hologram hologram = HologramsAPI.createHologram(Pathfinding.getInstance(), target.clone().add(0, 1.6, 0));
                 for (String s : ConfigFile.Tips.hologram) {
                     if (s.startsWith("[item]")) {
                         String id = StringUtils.replace(s, "[item]", "", 1);
@@ -113,7 +113,7 @@ public class SearchPathManager {
     }
 
     public static void removeHologram(Player player) {
-        if (!(ConfigFile.Enable.hologram && Main.hologram)) return;
+        if (!(ConfigFile.Enable.hologram && Pathfinding.hologram)) return;
 
         UUID uuid = player.getUniqueId();
 
@@ -129,7 +129,7 @@ public class SearchPathManager {
     }
 
     public static void updateLine(Player player, int dis) {
-        if (!(ConfigFile.Enable.hologram && Main.hologram)) return;
+        if (!(ConfigFile.Enable.hologram && Pathfinding.hologram)) return;
         UUID uuid = player.getUniqueId();
         if (!holograms.containsKey(uuid)) return;
 

@@ -1,7 +1,7 @@
 package com.taylorswiftcn.megumi.pathfinding.task;
 
+import com.taylorswiftcn.justwei.util.special.RGBParticle;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.astar.PathNode;
-import com.taylorswiftcn.megumi.pathfinding.util.special.RGBParticleUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -27,11 +27,11 @@ public class ParticleDemoTask extends BukkitRunnable {
     @Override
     public void run() {
         for (PathNode node : open) {
-            RGBParticleUtil.create(player, node.getLocation().clone().add(0, 0.2, 0), 132f, 112f, 255f);
+            RGBParticle.send(player, node.getLocation().clone().add(0, 0.2, 0), 132f, 112f, 255f);
         }
 
         for (PathNode node : close) {
-            RGBParticleUtil.create(player, node.getLocation().clone().add(0, 0.2, 0), 255f, 255f, 0f);
+            RGBParticle.send(player, node.getLocation().clone().add(0, 0.2, 0), 255f, 255f, 0f);
         }
 
         for (Location loc : path) {

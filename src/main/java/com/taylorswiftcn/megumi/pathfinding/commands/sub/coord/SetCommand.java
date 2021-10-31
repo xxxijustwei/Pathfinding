@@ -1,23 +1,35 @@
 package com.taylorswiftcn.megumi.pathfinding.commands.sub.coord;
 
-import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
-import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
+import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class SetCommand extends MegumiCommand {
+public class SetCommand extends SubCommand {
+
+    private Pathfinding plugin;
+
+    public SetCommand() {
+        this.plugin = Pathfinding.getInstance();
+    }
+
     @Override
-    public void perform(CommandSender CommandSender, String[] Strings) {
-        if (Strings.length != 3) return;
+    public String getIdentifier() {
+        return "set";
+    }
+
+    @Override
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length != 1) return;
 
         Player player = getPlayer();
-        String s = Strings[2];
+        String s = args[0];
 
-        getPlugin().getFileManager().add(s, player.getLocation());
-        getPlugin().getCoord().put(s, player.getLocation());
+        plugin.getFileManager().add(s, player.getLocation());
+        plugin.getCoord().put(s, player.getLocation());
 
-        CommandSender.sendMessage(ConfigFile.Prefix + "§a设置坐标成功!");
+        sender.sendMessage(ConfigFile.Prefix + "§a设置坐标成功!");
     }
 
     @Override
@@ -26,7 +38,8 @@ public class SetCommand extends MegumiCommand {
     }
 
     @Override
-    public PermissionType getPT() {
+    public String getPermission() {
         return null;
     }
+
 }

@@ -1,26 +1,21 @@
 package com.taylorswiftcn.megumi.pathfinding;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
+import com.taylorswiftcn.justwei.util.MegumiUtil;
 import com.taylorswiftcn.megumi.pathfinding.commands.MainCommand;
 import com.taylorswiftcn.megumi.pathfinding.file.FileManager;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.listener.DemoListener;
-import com.taylorswiftcn.megumi.pathfinding.util.MegumiUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 
-public class Main extends JavaPlugin {
-    @Getter private static Main instance;
+public class Pathfinding extends JavaPlugin {
+    @Getter private static Pathfinding instance;
 
     @Getter private FileManager fileManager;
-
-    @Getter private ProtocolManager pm;
 
     @Getter private HashMap<String, Location> coord;
 
@@ -34,9 +29,8 @@ public class Main extends JavaPlugin {
 
         instance = this;
 
-        MegumiUtil.log("###########################");
+        Bukkit.getConsoleSender().sendMessage("###########################");
 
-        pm = ProtocolLibrary.getProtocolManager();
         coord = new HashMap<>();
 
         fileManager = new FileManager(this);
@@ -44,16 +38,14 @@ public class Main extends JavaPlugin {
 
         initHook();
 
-        /*WayPointHandler.init();*/
-
         getCommand("pf").setExecutor(new MainCommand());
         Bukkit.getPluginManager().registerEvents(new DemoListener(), this);
 
         long end = System.currentTimeMillis();
 
-        MegumiUtil.log("§3加载成功! 用时 %time% ms".replace("%time%", String.valueOf(end - start)));
-        MegumiUtil.log("§e作者: justwei");
-        MegumiUtil.log("###########################");
+        Bukkit.getConsoleSender().sendMessage("§3加载成功! 用时 %time% ms".replace("%time%", String.valueOf(end - start)));
+        Bukkit.getConsoleSender().sendMessage("§e作者: justwei");
+        Bukkit.getConsoleSender().sendMessage("###########################");
     }
 
     @Override
@@ -71,9 +63,9 @@ public class Main extends JavaPlugin {
         citizens = Bukkit.getPluginManager().getPlugin("Citizens") != null;
         hologram = Bukkit.getPluginManager().getPlugin("HolographicDisplays") != null;
 
-        MegumiUtil.log(String.format("§3插件 DragonCore Hook: %s", dragonCore));
-        MegumiUtil.log(String.format("§3插件 Citizens Hook: %s", citizens));
-        MegumiUtil.log(String.format("§3插件 HolographicDisplays Hook: %s", hologram));
+        Bukkit.getConsoleSender().sendMessage("§3插件 DragonCore Hook: " + dragonCore);
+        Bukkit.getConsoleSender().sendMessage("§3插件 Citizens Hook: " + citizens);
+        Bukkit.getConsoleSender().sendMessage("§3插件 HolographicDisplays Hook: " + hologram);
     }
 
     public void reload() {

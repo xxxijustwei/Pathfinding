@@ -1,14 +1,26 @@
 package com.taylorswiftcn.megumi.pathfinding.commands.sub.coord;
 
-import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
-import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
+import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import org.bukkit.command.CommandSender;
 
-public class ListCommand extends MegumiCommand {
+public class ListCommand extends SubCommand {
+
+    private Pathfinding plugin;
+
+    public ListCommand() {
+        this.plugin = Pathfinding.getInstance();
+    }
+
     @Override
-    public void perform(CommandSender CommandSender, String[] Strings) {
-        CommandSender.sendMessage(ConfigFile.Prefix + "§a所有坐标: " + getPlugin().getCoord().keySet().toString());
+    public String getIdentifier() {
+        return "list";
+    }
+
+    @Override
+    public void perform(CommandSender sender, String[] args) {
+        sender.sendMessage(ConfigFile.Prefix + "§a所有坐标: " + plugin.getCoord().keySet());
     }
 
     @Override
@@ -17,7 +29,7 @@ public class ListCommand extends MegumiCommand {
     }
 
     @Override
-    public PermissionType getPT() {
+    public String getPermission() {
         return null;
     }
 }

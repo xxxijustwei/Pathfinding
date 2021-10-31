@@ -1,16 +1,21 @@
 package com.taylorswiftcn.megumi.pathfinding.commands.sub;
 
-import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
-import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
+import com.taylorswiftcn.megumi.pathfinding.commands.CommandPerms;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
 import org.bukkit.command.CommandSender;
 
-public class HelpCommand extends MegumiCommand {
+public class HelpCommand extends SubCommand {
     @Override
-    public void perform(CommandSender CommandSender, String[] Strings) {
-        MessageFile.Help.forEach(CommandSender::sendMessage);
-        if (CommandSender.hasPermission(String.format("%s.%s", getPlugin().getName(), "admin").toLowerCase()))
-            MessageFile.AdminHelp.forEach(CommandSender::sendMessage);
+    public String getIdentifier() {
+        return "help";
+    }
+
+    @Override
+    public void perform(CommandSender sender, String[] args) {
+        MessageFile.Help.forEach(sender::sendMessage);
+        if (sender.hasPermission(CommandPerms.ADMIN.getNode()))
+            MessageFile.AdminHelp.forEach(sender::sendMessage);
     }
 
     @Override
@@ -19,7 +24,7 @@ public class HelpCommand extends MegumiCommand {
     }
 
     @Override
-    public PermissionType getPT() {
-        return null;
+    public String getPermission() {
+        return CommandPerms.USER.getNode();
     }
 }

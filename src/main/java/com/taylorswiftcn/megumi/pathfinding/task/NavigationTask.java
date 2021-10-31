@@ -1,10 +1,10 @@
 package com.taylorswiftcn.megumi.pathfinding.task;
 
+import com.taylorswiftcn.justwei.util.special.EntityGlow;
+import com.taylorswiftcn.justwei.util.special.RGBParticle;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
-import com.taylorswiftcn.megumi.pathfinding.util.special.EntityGlowUtil;
-import com.taylorswiftcn.megumi.pathfinding.util.special.RGBParticleUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -41,7 +41,7 @@ public class NavigationTask extends BukkitRunnable {
     @Override
     public synchronized void cancel() throws IllegalStateException {
         SearchPathManager.removeHologram(player);
-        if (npc != null && glow) EntityGlowUtil.unGlow(player, npc);
+        if (npc != null && glow) EntityGlow.undoGlow(player, npc);
         super.cancel();
     }
 
@@ -60,7 +60,7 @@ public class NavigationTask extends BukkitRunnable {
         int distance = BigDecimal.valueOf(player.getLocation().distance(target)).setScale(0, BigDecimal.ROUND_DOWN).intValue();
 
         if (distance < 2) {
-            if (npc != null) EntityGlowUtil.unGlow(player, npc);
+            if (npc != null) EntityGlow.undoGlow(player, npc);
             player.sendMessage(ConfigFile.Prefix + MessageFile.arriveCoord);
             cancel();
             return;
@@ -71,7 +71,7 @@ public class NavigationTask extends BukkitRunnable {
         }
 
         if (!glow && npc != null && distance < 32) {
-            EntityGlowUtil.glow(player, npc);
+            EntityGlow.doGlow(player, npc);
             glow = true;
         }
 
@@ -84,7 +84,7 @@ public class NavigationTask extends BukkitRunnable {
 
         for (Location loc : path) {
 
-            RGBParticleUtil.create(player, loc.clone().add(0, 0.6, 0));
+            RGBParticle.send(player, loc.clone().add(0, 0.6, 0));
             if (front == null) {
                 front = loc;
                 continue;
@@ -103,7 +103,7 @@ public class NavigationTask extends BukkitRunnable {
         for (double i = 0; i < length; i += 0.1) {
             Vector child = vector.clone().multiply(i);
             start.add(child);
-            RGBParticleUtil.create(player, start);
+            RGBParticle.send(player, start);
             start.subtract(child);
         }
     }

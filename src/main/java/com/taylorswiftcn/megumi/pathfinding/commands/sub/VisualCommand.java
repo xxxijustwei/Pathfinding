@@ -1,14 +1,20 @@
 package com.taylorswiftcn.megumi.pathfinding.commands.sub;
 
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import com.taylorswiftcn.megumi.pathfinding.algorithm.SearchPathManager;
-import com.taylorswiftcn.megumi.pathfinding.commands.MegumiCommand;
-import com.taylorswiftcn.megumi.pathfinding.commands.PermissionType;
+import com.taylorswiftcn.megumi.pathfinding.commands.CommandPerms;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class VisualCommand extends MegumiCommand {
+public class VisualCommand extends SubCommand {
+
     @Override
-    public void perform(CommandSender CommandSender, String[] Strings) {
+    public String getIdentifier() {
+        return "visual";
+    }
+
+    @Override
+    public void perform(CommandSender sender, String[] args) {
         Player player = getPlayer();
         SearchPathManager.switchVisual(player);
     }
@@ -19,7 +25,7 @@ public class VisualCommand extends MegumiCommand {
     }
 
     @Override
-    public PermissionType getPT() {
-        return PermissionType.Admin;
+    public String getPermission() {
+        return CommandPerms.ADMIN.getNode();
     }
 }

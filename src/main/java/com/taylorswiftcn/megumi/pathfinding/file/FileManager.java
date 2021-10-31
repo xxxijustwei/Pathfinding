@@ -1,9 +1,9 @@
 package com.taylorswiftcn.megumi.pathfinding.file;
 
+import com.taylorswiftcn.justwei.file.JustConfiguration;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.ConfigFile;
 import com.taylorswiftcn.megumi.pathfinding.file.sub.MessageFile;
-import com.taylorswiftcn.megumi.pathfinding.util.MegumiUtil;
-import com.taylorswiftcn.megumi.pathfinding.Main;
+import com.taylorswiftcn.megumi.pathfinding.Pathfinding;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,13 +12,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
-public class FileManager {
-    private Main plugin;
+public class FileManager extends JustConfiguration {
+    private Pathfinding plugin;
     @Getter private YamlConfiguration config;
     @Getter private YamlConfiguration message;
     @Getter private YamlConfiguration coord;
 
-    public FileManager(Main plugin) {
+    public FileManager(Pathfinding plugin) {
+        super(plugin);
         this.plugin = plugin;
     }
 
@@ -30,17 +31,6 @@ public class FileManager {
         ConfigFile.init();
         MessageFile.init();
         load();
-    }
-
-    private YamlConfiguration initFile(String name) {
-        File file = new File(plugin.getDataFolder(), name);
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            MegumiUtil.copyFile(plugin.getResource(name), file);
-            MegumiUtil.log(String.format("§3File: 已生成 %s 文件", name));
-        }
-        else MegumiUtil.log(String.format("§3File: 已加载 %s 文件", name));
-        return YamlConfiguration.loadConfiguration(file);
     }
 
     public void load() {
