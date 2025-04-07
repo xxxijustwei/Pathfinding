@@ -1,1 +1,1 @@
-![avatar](https://github.com/xxxijustwei/Pathfinding/blob/master/des.png)
+![image](https://github.com/xxxijustwei/Pathfinding/blob/v2.x/des.png)
